@@ -1,0 +1,62 @@
+\subsection{Path Traversal}
+
+Este error se da cuando un programa hace uso de entrada externa para acceder a recursos del file system.
+Si no se valida y limita correctamente a que recursos se puede acceder, un atacante puede obtener informacion privilegiada o vulnerar el programa y/o sistema en el que corre.
+
+Todo sistema que haga manejo de recursos del file system se encuentra potencialmente afectado por esta vulnerabilidad.
+No depende del sistema operativo ni del lenguaje utilizado.
+Algunos lenguajes pueden ofrecer mecanismos para mitigar este ataque, pero deben ser correctamente configurados para esto.
+
+\subsubsection{Consecuencias}
+
+Un programa afectado por esta vulnerabilidad podria ser manipulado para lograr los siguientes efectos:
+
+\begin{itemize}
+
+    \item Modificar archivos criticos del sistema o programa para alterar el comportamiento del mismo o otros programas en el sistema
+
+    \item Otorgarle al atacante acceso a partes seguras del sistema alterando archivos de seguridad
+
+    \item El atacante podria obtener acceso de lectura a archivos con informacion sensible, potencialmente otorgandole informacion de otros usuarios del sistema o informacion de seguridad del mismo
+
+\end{itemize}
+
+\subsubsection{Ejemplo}
+
+\begin{figure}[H]
+
+% TODO: Replace this with a syntax highlighting code enviorment
+    \begin{verbatim}
+<?php
+include($_GET['file']);
+    \end{verbatim}
+
+    \caption{Codigo PHP vulnerable a revelar informacion sensible}
+    \label{code:php-traversal}
+
+\end{figure}
+
+Si este script se encuentra en un sistema \textit{Linux} podemos obtener la lista de usuarios del sistema y sus contraseñas encriptadas haciendo un request a \texttt{/vulnerable.php?file=/etc/passwd}.
+
+\subsubsection{Deteccion}
+
+En lenguajes donde este disponible, herramientas de analisis estatico pueden facilmente detectar potenciales casos de \textit{Path Traversal}. Es posible que se encuentre con falsos positivos, donde la funcionalidad sea deseada para administradores o usuarios con suficientes privilegios.
+En caso de no disponer de herramientas de analisis estatico, el uso de \textit{White Box testing} puede detectar ocurrencias de esta clase de vulnerabilidad.
+
+\subsubsection{Proteccion}
+
+Existen numerosas maneras de proteger un programa de este tipo de error. 
+Como en toda vulnerabilidad de entrada externa maliciosa, se debe tratar como potencialmente hostil toda entrada, incluso si viene de una fuente confiado.
+
+Se puede utilizar tecnicas de \textit{White listing} y \textit{Black listing}.
+Es decir comparar la entrada contra una lista de valores conocidos que sean considerados seguros o no.
+En este caso, el uso de \textit{Black listing} no alcanza para protegerse, ya que es posible que la lista no contenga todas las posibles combinaciones maliciosas.
+
+Ejecutar el programa dentro de un \textit{sandbox} puede ofrecer proteccion limitada contra vulnerar el sistema.
+Pero no ofrece proteccion a los recursos dentro del alcanze del programa.
+Un atacante podria obtener acceso privilegiado al programa, y usar este acceso para forzar al programa a salir del \textit{sandbox}, obteniendo acceso al sistema.
+
+La mejor forma de evitar este tipo de problema es hacer uso de funciones de \textit{path canonicalization}.
+Si se resuelve el \textit{path} resultante de la entrada del usuario, se puede verificar correctamente usando \textit{white listing} que no se intente manipular recursos fuera de los permitidos.
+
+
