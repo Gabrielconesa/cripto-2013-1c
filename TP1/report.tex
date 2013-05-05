@@ -19,6 +19,12 @@
 \usepackage{listings}
 \usepackage{bm}
 \usepackage{times}
+\usepackage{verbatim}
+\usepackage{moreverb}
+\usepackage{fancyvrb}
+\usepackage{hyperref}
+\usepackage{multirow}
+
 
 \begin{document}
 \setcounter{secnumdepth}{5}
@@ -54,7 +60,66 @@
 
 \setcounter{page}{1}
 
-% TODO: Introduccion a los 25 issues
+\section{Introducción}
+La lista de los 25 errores de software más frecuentes es un proyecto impulsado por \textbf{SANS Institute}, \textbf{MITRE} y expertos en seguridad informática de EEUU 
+y Europa. Se deriva de la experiencia del desarrollo del Top20\footnote{\href{http://www.sans.org/top20/}{http://www.sans.org/top20/}} de ataques informáticos
+implementado por SANS, y la enumeración de debilidades comunes\footnote{\href{http://cwe.mitre.org/}{http://cwe.mitre.org/}} de software 
+desarrollado por MITRE. Este \emph{ranking} se actualiza todos los años, y para la selección de los errores en cada año,
+se toman en cuenta evaluaciones realizadas por distintas empresas del rubro de seguridad informática, las cuales evalúan a
+los errores según \textbf{prevalecencia}, \textbf{importancia} y \textbf{posibilidad de \emph{exploit}}. Luego, todas estas
+evaluaciones son las entradas para el sistema de puntaje diseñado por MITRE (\emph{Common Weakness Scoring System}), de donde se obtienen los
+errores ordenados.\\
+ 
+Los 25 errores están categorizados en los siguientes 3 grupos
+\begin{itemize}
+    \item Interacción insegura entre componentes.
+    \item Gestión riesgosa de recursos.
+    \item Defensas porosas.
+\end{itemize}
+ 
+En este año, fueron 20 las organizaciones evaluadoras, y el resultado de la evaluación arrojó el \emph{ranking} de errores que se muestra
+en la siguiente sección.
+ 
+\subsection{Los 25 errores más frecuentes del 2011}
+Se presentan resaltados los errores que se analizan en este documento.
+\begin{enumerate}
+    \item SQL Injection
+    \item OS Command Injection
+    \item \textbf{Classic Buffer Overflow}
+    \item Improper Neutralization of Input During Web Page Generation (``Cross-site Scripting'')
+    \item Missing Authentication for Critical Function
+    \item Missing Authorization
+    \item Uso de credenciales hard-codeadas.
+    \item \textbf{Missing Encryption of Sensitive Data}
+    \item Unrestricted Upload of File with Dangerous Type
+    \item Reliance on Untrusted Inputs in a Security Decision
+    \item Execution with Unnecessary Privileges
+    \item Cross-Site Request Forgery (CSRF)
+    \item \textbf{Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')}
+    \item Download of Code Without Integrity Check
+    \item Incorrect Authorization
+    \item Inclusion of Functionality from Untrusted Control Sphere
+    \item Incorrect Permission Assignment for Critical Resource
+    \item \textbf{Use of Potentially Dangerous Functionality}
+    \item Use of a Broken or Risky Cryptographic Algorithm
+    \item Incorrect Calculation of Buffer Size
+    \item Improper Restriction of Excessive Authentication Attempts
+    \item URL Redirection to Untrusted Site ('Open Redirect')
+    \item \textbf{Uncontrolled Format String}
+    \item Integer Overflow or Wraparound
+    \item Use of a One-Way Hash without a Salt
+\end{enumerate}
+
+\subsection{Otras vulnerabilidades}
+Otras vulnerabilidades que no fueron selecccionados para el \emph{Top25} son:
+
+\begin{enumerate}
+ \setcounter{enumi}{26}
+ \item \textbf{Improper Validation of Array Index}
+ \setcounter{enumi}{38}
+ \item \textbf{Information Exposure Through an Error Message}
+\end{enumerate}
+
 
 \section{Errores}
 
