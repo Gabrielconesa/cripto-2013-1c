@@ -1,0 +1,98 @@
+\subsection{Use of Potentially Dangerous Function}
+
+\subsubsection{Descripción del error}
+Un programa invoca una función potencialmente peligrosa, que podría introducir una vulnerabilidad si se usa incorrectamente, con algún conjunto de parámetros, pero que
+también puede ser invocada de forma segura.
+
+\subsubsection{Detalles técnicos del error}
+\begin{tabular}[\baselineskip]{|l|p{11cm}|}
+  \hline
+  \textbf{Categoría} & Manejo Riesgoso de Recursos \\
+  \hline
+  \textbf{Plataforma} & Lenguajes de Programación \\
+  \hline
+  \textbf{Lenguaje} & C, C++ \\
+  \hline
+  \textbf{Probabilidad de \emph{exploit}} & Alta \\
+  \hline
+\end{tabular} 
+
+\subsubsection{Ejemplos de código}
+A continuación se muestra un pequeño y simple ejemplo con código en Lenguaje C.
+
+\begin{Verbatim}[frame=single]
+    void manipulate_string(char * string){
+        char buf[24];
+        strcpy(buf, string);
+        ...
+    }
+\end{Verbatim}
+
+El fragmento anterior intenta crear una copia local de un buffer para manipular sus datos, pero no se asegura que los datos apuntados por string entren en el
+buffer local y se copia ciegamente los datos, con la función potencialmente peligrosa \textit{strcpy()}. Esto puede tranquilamente resultar en una condición de \textbf{buffer overflow}
+si un atacante puede influenciar los contenidos del parámetro string. 
+En este caso, se podría evitar muy fácilmente haciendo una verificación del tamaño del parámetro string, o utilizando la función seguro \textit{strncpy()}.
+
+\subsubsection{Métodos de detección}
+La detección de este tipo de funciones resulta muy díficil, principalmente porque depende de un profundo conocimiento del desarrollador que usa la función potencialmente peligrosa.
+
+\begin{itemize}
+    \item Investigar y entender completamente el funcionamiento de una función, previo a su uso en un entorno de producción.
+    \item Utilizar herramientas de análisis automático de código o compiladores que detecten el uso de este tipo de funciones.
+    \item Mantenerse actualizado sobre las noticias y los parches de seguridad acerca del lenguaje o framework que se utiliza a diario.
+\end{itemize}
+
+\subsubsection{Nivel de vulnerabilidad}
+
+El nivel de vulnerabilidad es \textit{primario}, lo que significa que esta vulnerabilidad existe independientemente de la existencia de otras vulnerabilidades.
+
+
+\subsubsection{Consecuencias más frecuentes}
+
+Si la función se utiliza incorrectamente, es decir se le pasan ciertos parámetros que generan el comportamiento peligroso, entonces se podrían generar problemas de seguridad. 
+Por ejemplo,
+
+\begin{itemize}
+    \item Ejecución de código arbitrario por parte de un atacante.
+    \item Que usuarios locales comunes, o atacantes remotos ganen privilegios que no deberían tener.
+\end{itemize}
+  
+\subsubsection{Formas de mitigar el error}
+\begin{itemize}
+   \item Identificar una lista de funciones de APIs prohibidas, y prohibir su uso a los desarrolladores, proveyendo alternativas seguras.
+   \item Utilizar o configurar herramientas de análisis automático de código o compiladores para detectar el uso de estas funciones. (Ej: \textit{banned.h} de SDL de Microsoft).
+\end{itemize}
+
+\subsubsection{Extras}
+
+Esta vulnerabilidad es diferente de la CWE-242 (Use of Inherently Dangerous Function), ya que esta última abarca funciones tales problemas de seguridad que nunca podría ser
+considerada segura. Algunas funciones, si son usadas correctamente, no suponen directamente un riesgo de seguridad, pero puede introducir una debilidad si no son
+invocadas correctamente. Estas son las llamadas funciones potencialmente peligrosas. Un ejemplo muy conocido es la función \textit{strcpy()}. Cuando se le provee un buffer
+de destino más largo que la fuente, \textit{strcpy()} no causará un \textbf{buffer overflow}. Sin embargo, se utilizada de manera errónea tan frecuentemente, que algunos desarrolladores
+prohiben por completo su uso.
+
+\subsubsection{Ejemplos observados}
+
+Multiples buffer overflows en LIBFtp 5.0 permiten a los atacantes ejecutar código arbitrario pasando ciertos argumentos largos a las funciones FtpArchie, 
+FtpDebugDebug, FtpOpenDir, FtpSize, or FtpChmod.\\
+
+Multiples stack-based buffer overflows en HP OpenView Network Node Manager (OV NNM) 7.01, 7.51, y 7.53 permiten a los atacantes remotos ejecutar código arbitrario
+pasando un parámetro Template a  nnmRptConfig.exe, relacionado con la función strcat; o un largo parámetro Oid a snmp.exe.\\
+
+Buffer overflow en SWS web Server 0.1.7 permiten a los atacantes remotos ejecutar código arbitrario a través de un request muy largo.\\
+
+Multiples buffer overflows en STLport 5.0.2 podrían permitir a usuarios locales ejecutar código arbitrario pasando varibles de entorno de locale largas a la función
+strcpy llamada en c\_locale\_glibc2.c y argumentos largos a funciones no específicadas en num\_put\_float.cpp.\\
+ 
+Multiples buffer overflows en la funcionalidad caiaq Native Instruments USB audio en el kernel de Linux previo a 2.6.38-rc4-next-20110215 podría permitir a
+atacantes causar un denial of services (DoS) o posiblemente tener otros impactos no especificados pasando un nombre de USB device largo a las funciones
+snd\_usb\_caiaq\_audio\_init en sound/usb/caiaq/audio.c y snd\_usb\_caiaq\_midi\_init en sound/usb/caiaq/midi.c.\\
+
+Multiples stack-based buffer overflows en el  IMAP Toolkit 2002 a 2007c de la Universidad de Washington , el Alpine 2.00 y anteriores de la Universidad de Washington,
+y Panda IMAP permiten:
+
+\begin{itemize}
+    \item que usuarios locales ganen privilegios especificando un argumento de extensión de carpeta largo en la línea de comando al programa tmail o dmail;
+    \item que atacantes remotos ejecutarán código arbitrario enviando e-mails a una casilla de correo destino con el nombre compuesto por el nombre de usuario y un caracter '+'
+    seguido de una cadena larga, procesados por el programa tmail o posiblemente dmail.
+\end{itemize}
