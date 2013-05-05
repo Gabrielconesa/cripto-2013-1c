@@ -1,0 +1,104 @@
+\subsection{Missing Encryption of Sensitive Data}
+  
+Esta vulnerabilidad sucede en aquellos casos en donde se envían datos sensibles sin haberlos encriptado a través de un canal no seguro.
+Al omitir las garantías de seguridad e integridad no solo se le permite a un posible atacante tomar información de la comunicación, 
+sino también la inyección de nuevos datos, sin permitirle a ninguna de las dos partes información válida de la inválida.
+
+\subsubsection{Detalles técnicos del error}
+\begin{tabular}[\baselineskip]{|l|p{11cm}|}
+  \hline
+  \textbf{Categoría} & Defensas porosas, problemas criptográficos, . \\
+  \hline
+  \textbf{Plataforma} & Independiente. \\
+  \hline
+  \textbf{Lenguaje} & Independiente. \\
+  \hline
+  \textbf{Probabilidad de \emph{exploit}} & Alto a Muy Alto. \\
+  \hline
+\end{tabular}
+
+\subsubsection{Consecuencias}
+
+Los ataques basados en falta de encripción de datos sensibles pueden violar la confidencialidad y la integridad del sistema.
+
+\begin{itemize}
+ \item Confidencialidad: La aplicación no utiliza un canal seguro, como SSL/TLS, para  el intercambio información sensible.
+	De este modo, un atacante puede acceder al tráfico de información tomando paquetes de la conexión y evaluarlos.
+ \item Integridad: Al omitir la encripción de datos en cualquier aplicación puede ser considerado equivalente a enviarle la información a todos los miembros de las redes localales del
+	emisor y el destinatario. Más aun, esta omisión permite que se agregue o modifique información haciendo para los usuarios imposible distinguir datos válidos de datos inválidos.
+\end{itemize}
+
+\subsubsection{Ejemplos}
+
+\noindent \textbf{Ejemplo en PHP}\\
+
+El siguiente código, escrito en PHP muestra este tipo de vulnerabilidad.
+En este caso se escribe la información de ingreso de un usuario en una \textit{cookie} para que el usuario no tenga que volver a intgresar.
+\begin{Verbatim}[frame=single]
+function persistLogin($username, $password){
+  $data = array("username" => $username, "password"=> $password);
+  setcookie ("userdata", $data);
+}
+\end{Verbatim}
+
+La información guardada en la \textit{cookie} en la computadora del usuario se encuentra como texto plano.
+Esto expone las credenciales del usuario si su equipo resulta atacado. 
+
+\noindent \textbf{Ejemplo en Java}\\
+
+El siguiente ejemplo, en Java, intenta establecer una conexión con un sitio para intercambiar información sensible.
+
+\begin{Verbatim}[frame=single]
+try {
+	URL u = new URL("http://www.secret.example.org/");
+	HttpURLConnection hu = (HttpURLConnection) u.openConnection();
+	hu.setRequestMethod("PUT");
+	hu.connect();
+	OutputStream os = hu.getOutputStream();
+	hu.disconnect();
+}
+catch (IOException e) {
+//...
+}
+\end{Verbatim}
+
+Aunque se realiza con éxito una conexión, esta conexión no esta encriptada i es posible que toda la información enviada o recibida desde el servidor sea accedida por posibles atacantes.
+
+\noindent \textbf{Ejemplo en C}\\
+
+El siguiente ejemplo, en C, intenta establecer una conexión, leer una contraseña y luego guardarla en un \textit{buffer}.
+
+\begin{Verbatim}[frame=single]
+server.sin_family = AF_INET; hp = gethostbyname(argv[1]);
+if (hp==NULL) error("Unknown host");
+memcpy( (char *)&server.sin_addr,(char *)hp->h_addr,hp->h_length);
+if (argc < 3) port = 80;
+else port = (unsigned short)atoi(argv[3]);
+server.sin_port = htons(port);
+if (connect(sock, (struct sockaddr *)&server, sizeof server) < 0) error("Connecting");
+//...
+while ((n=read(sock,buffer,BUFSIZE-1))!=-1) {
+	write(dfd,password_buffer,n);
+	//...
+}
+\end{Verbatim}
+
+Mientras resulte exitoso, este programa no encripta la información antes de escribirla en el \textit{buffer} haciendo posible la exposición de esta información.
+
+\subsubsection{Detección}
+\begin{itemize}
+ \item \textbf{Análisis manual}
+	Definir que información es sensible y cuál no requiere un alto conocimiento del sistema, con lo cuál un análisis manual suele ser requerido para una solución efectiva. 
+	Sin embargo, un esfuerzo manual no asegura una solución total respecto a los posibles límites de tiempo. 
+	Los métodos de caja negra pueden producir artefactos que necesariamente requieran análisis manual.
+	Este método tiene una alta efectividad.
+  \item \textbf{Análisis automatizado}
+  Un análisis automatizado puede alertar la falta de encripción para ciertos datos.
+  Sin embargo un análisis humano sigue siendo requerido para distinguit información que intencionalmente no esta siendo encriptada.
+\end{itemize}
+
+\subsubsection{Protección}
+
+En una primera instancia es necesario hacer un análisis profundo de los requerimientos de confidencialidad e integridad del sistema. 
+Una vez pasada esta etapa basta con encriptar correctamente los datos considerados sensibles.
+Por último, el uso de un canal seguro como SSL es una buena práctica que ayuda a eliminar este problema.
