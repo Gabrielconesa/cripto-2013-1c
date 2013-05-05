@@ -22,8 +22,9 @@
 \usepackage{verbatim}
 \usepackage{moreverb}
 \usepackage{fancyvrb}
-\usepackage{hyperref}
+% \usepackage{hyperref}
 \usepackage{multirow}
+\usepackage{url}
 
 
 \begin{document}
@@ -62,8 +63,8 @@
 
 \section{Introducción}
 La lista de los 25 errores de software más frecuentes es un proyecto impulsado por \textbf{SANS Institute}, \textbf{MITRE} y expertos en seguridad informática de EEUU 
-y Europa. Se deriva de la experiencia del desarrollo del Top20\footnote{\href{http://www.sans.org/top20/}{http://www.sans.org/top20/}} de ataques informáticos
-implementado por SANS, y la enumeración de debilidades comunes\footnote{\href{http://cwe.mitre.org/}{http://cwe.mitre.org/}} de software 
+y Europa. Se deriva de la experiencia del desarrollo del Top20\footnote{\url{http://www.sans.org/top20/}} de ataques informáticos
+implementado por SANS, y la enumeración de debilidades comunes\footnote{\url{http://cwe.mitre.org/}} de software 
 desarrollado por MITRE. Este \emph{ranking} se actualiza todos los años, y para la selección de los errores en cada año,
 se toman en cuenta evaluaciones realizadas por distintas empresas del rubro de seguridad informática, las cuales evalúan a
 los errores según \textbf{prevalecencia}, \textbf{importancia} y \textbf{posibilidad de \emph{exploit}}. Luego, todas estas
@@ -120,10 +121,10 @@ Otras vulnerabilidades que no fueron selecccionados para el \emph{Top25} son:
  \item \textbf{Information Exposure Through an Error Message}
 \end{enumerate}
 
-
+\clearpage
 \section{Errores}
 
-\include{issue120}
+\input{issue120}
 
 \include{issue134}
 
