@@ -5,9 +5,9 @@ Al omitir las garantías de seguridad e integridad no solo se le permite a un po
 sino también la inyección de nuevos datos, sin permitirle a ninguna de las dos partes información válida de la inválida.
 
 \subsubsection{Detalles técnicos del error}
-\begin{tabular}[\baselineskip]{|l|p{11cm}|}
+\begin{tabular}[\baselineskip]{|l|p{7cm}|}
   \hline
-  \textbf{Categoría} & Defensas porosas, problemas criptográficos, . \\
+  \textbf{Categoría} & Defensas porosas, problemas criptográficos. \\
   \hline
   \textbf{Plataforma} & Independiente. \\
   \hline
@@ -34,21 +34,21 @@ Los ataques basados en falta de encripción de datos sensibles pueden violar la 
 
 El siguiente código, escrito en PHP muestra este tipo de vulnerabilidad.
 En este caso se escribe la información de ingreso de un usuario en una \textit{cookie} para que el usuario no tenga que volver a intgresar.
-\begin{Verbatim}[frame=single]
+\begin{lstlisting}[frame=single]
 function persistLogin($username, $password){
-  $data = array("username" => $username, "password"=> $password);
-  setcookie ("userdata", $data);
+    $data = array("username" => $username, "password"=> $password);
+    setcookie ("userdata", $data);
 }
-\end{Verbatim}
+\end{lstlisting}
 
 La información guardada en la \textit{cookie} en la computadora del usuario se encuentra como texto plano.
-Esto expone las credenciales del usuario si su equipo resulta atacado. 
+Esto expone las credenciales del usuario si su equipo resulta atacado. \\
 
 \noindent \textbf{Ejemplo en Java}\\
 
 El siguiente ejemplo, en Java, intenta establecer una conexión con un sitio para intercambiar información sensible.
 
-\begin{Verbatim}[frame=single]
+\begin{lstlisting}[frame=single]
 try {
 	URL u = new URL("http://www.secret.example.org/");
 	HttpURLConnection hu = (HttpURLConnection) u.openConnection();
@@ -60,7 +60,7 @@ try {
 catch (IOException e) {
 //...
 }
-\end{Verbatim}
+\end{lstlisting}
 
 Aunque se realiza con éxito una conexión, esta conexión no esta encriptada i es posible que toda la información enviada o recibida desde el servidor sea accedida por posibles atacantes.
 
@@ -68,10 +68,10 @@ Aunque se realiza con éxito una conexión, esta conexión no esta encriptada i 
 
 El siguiente ejemplo, en C, intenta establecer una conexión, leer una contraseña y luego guardarla en un \textit{buffer}.
 
-\begin{Verbatim}[frame=single]
+\begin{lstlisting}[frame=single]
 server.sin_family = AF_INET; hp = gethostbyname(argv[1]);
 if (hp==NULL) error("Unknown host");
-memcpy( (char *)&server.sin_addr,(char *)hp->h_addr,hp->h_length);
+    memcpy( (char *)&server.sin_addr,(char *)hp->h_addr,hp->h_length);
 if (argc < 3) port = 80;
 else port = (unsigned short)atoi(argv[3]);
 server.sin_port = htons(port);
@@ -81,7 +81,7 @@ while ((n=read(sock,buffer,BUFSIZE-1))!=-1) {
 	write(dfd,password_buffer,n);
 	//...
 }
-\end{Verbatim}
+\end{lstlisting}
 
 Mientras resulte exitoso, este programa no encripta la información antes de escribirla en el \textit{buffer} haciendo posible la exposición de esta información.
 
