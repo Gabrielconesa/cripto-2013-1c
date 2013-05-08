@@ -1,0 +1,35 @@
+\subsection{Uncontrolled Format String}
+
+Esta vulnerabilidad aparece cuando se le da la posibilidad al usuario de controlar el formato de impresión.
+Este error se de normalmente en los sistemas con "logeo" o "internalización y localización", lo que no quiere decir que no pueda pasar en un sistema que no los tenga.
+Solo se da en lenguajes que soportan texto formateado (Ej: C, C++, Pearl).
+
+
+\subsubsection{Consecuencias}
+
+Un programa afectado por esta vulnerabilidad podria ser manipulado para lograr los siguientes efectos:
+
+\begin{itemize}
+
+	\item Problemas de representación de datos
+
+	\item Ver los contenidos del "stack"
+
+	\item Escrivir al "stack"
+\end{itemize}
+    
+
+
+\subsubsection{Detección}
+Prestar atencion a los "warnings" del compilador y linkeditor
+    
+    
+\subsubsection{Protección}
+	
+\begin{itemize}
+
+	\item Elegir un lenguage que no sea suceptible a este error.
+
+	\item Asegurarse que todos los "Strings" de formato sean estaticos
+	
+\end{itemize}
