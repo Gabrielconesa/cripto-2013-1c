@@ -5,11 +5,13 @@ Un programa invoca una función potencialmente peligrosa, que podría introducir
 también puede ser invocada de forma segura.
 
 \subsubsection{Detalles técnicos del error}
-\begin{tabular}[\baselineskip]{|l|p{11cm}|}
+\begin{tabular}[\baselineskip]{|l|p{7cm}|}
   \hline
   \textbf{Categoría} & Manejo Riesgoso de Recursos \\
   \hline
   \textbf{Plataforma} & Lenguajes de Programación \\
+  \hline
+  \textbf{Tiempo de Introducción} & Arquitectura y Diseño. Implementación. \\
   \hline
   \textbf{Lenguaje} & C, C++ \\
   \hline
@@ -20,13 +22,13 @@ también puede ser invocada de forma segura.
 \subsubsection{Ejemplos de código}
 A continuación se muestra un pequeño y simple ejemplo con código en Lenguaje C.
 
-\begin{Verbatim}[frame=single]
+\begin{lstlisting}[frame=single]
     void manipulate_string(char * string){
         char buf[24];
         strcpy(buf, string);
         ...
     }
-\end{Verbatim}
+\end{lstlisting}
 
 El fragmento anterior intenta crear una copia local de un buffer para manipular sus datos, pero no se asegura que los datos apuntados por string entren en el
 buffer local y se copia ciegamente los datos, con la función potencialmente peligrosa \textit{strcpy()}. Esto puede tranquilamente resultar en una condición de \textbf{buffer overflow}
@@ -73,26 +75,20 @@ prohiben por completo su uso.
 
 \subsubsection{Ejemplos observados}
 
-Multiples buffer overflows en LIBFtp 5.0 permiten a los atacantes ejecutar código arbitrario pasando ciertos argumentos largos a las funciones FtpArchie, 
-FtpDebugDebug, FtpOpenDir, FtpSize, or FtpChmod.\\
-
-Multiples stack-based buffer overflows en HP OpenView Network Node Manager (OV NNM) 7.01, 7.51, y 7.53 permiten a los atacantes remotos ejecutar código arbitrario
-pasando un parámetro Template a  nnmRptConfig.exe, relacionado con la función strcat; o un largo parámetro Oid a snmp.exe.\\
-
-Buffer overflow en SWS web Server 0.1.7 permiten a los atacantes remotos ejecutar código arbitrario a través de un request muy largo.\\
-
-Multiples buffer overflows en STLport 5.0.2 podrían permitir a usuarios locales ejecutar código arbitrario pasando varibles de entorno de locale largas a la función
-strcpy llamada en c\_locale\_glibc2.c y argumentos largos a funciones no específicadas en num\_put\_float.cpp.\\
- 
-Multiples buffer overflows en la funcionalidad caiaq Native Instruments USB audio en el kernel de Linux previo a 2.6.38-rc4-next-20110215 podría permitir a
-atacantes causar un denial of services (DoS) o posiblemente tener otros impactos no especificados pasando un nombre de USB device largo a las funciones
-snd\_usb\_caiaq\_audio\_init en sound/usb/caiaq/audio.c y snd\_usb\_caiaq\_midi\_init en sound/usb/caiaq/midi.c.\\
-
-Multiples stack-based buffer overflows en el  IMAP Toolkit 2002 a 2007c de la Universidad de Washington , el Alpine 2.00 y anteriores de la Universidad de Washington,
-y Panda IMAP permiten:
-
-\begin{itemize}
-    \item que usuarios locales ganen privilegios especificando un argumento de extensión de carpeta largo en la línea de comando al programa tmail o dmail;
-    \item que atacantes remotos ejecutarán código arbitrario enviando e-mails a una casilla de correo destino con el nombre compuesto por el nombre de usuario y un caracter '+'
-    seguido de una cadena larga, procesados por el programa tmail o posiblemente dmail.
-\end{itemize}
+\begin{tabular}[\baselineskip]{|p{1.75cm}|p{4.75cm}|p{6.5cm}|}
+  \hline
+  \textbf{Referencia} & Programa/Aplicación & Resumen de la vulnerabilidad \\
+  \hline
+  \textbf{CVE-2007-1470} & LIBFtp 5.0 & Librería con multiples buffer overflows usando sprintf() and strcpy().\\
+  \hline
+  \textbf{CVE-2009-3849} & HP OpenView Network Node Manager(7.01-7.53) & Buffer overflow usando strcat(). \\
+  \hline
+  \textbf{CVE-2006-2114} & SWS web Server 0.1.7  & Buffer overflow usando strcpy(). \\
+  \hline
+  \textbf{CVE-2006-0963} & STLport 5.0.2  & Buffer overflow usando strcpy(). \\
+  \hline
+  \textbf{CVE-2011-0712} & Linux kernel(2.6.38-rc4-next-20110215) & Uso vulnerable de strcpy() cambiado a uso seguro de strlcpy().\\
+  \hline
+  \textbf{CVE-2008-5005} & IMAP Toolkit(2002-2007), Alpine 2.00, Panda IMAP & Buffer overflow usando strcpy(). \\
+  \hline
+\end{tabular}
