@@ -1,0 +1,170 @@
+\subsection{Buffer Copy without Checking Size of Input ('Classic Buffer Overflow')}
+
+\subsubsection{Descripción del error}
+
+El programa copia un buffer de entrada a otro de salida, sin verificar que el tamaño del buffer de entrada sea menor que el tamaño del buffer de salida. Esto provoca 
+lo que se conoce como \textbf{buffer overflow}.\\
+
+Una condición de buffer overflow existe cuando un programa intenta poner más datos en un buffer de los que éste puede contener, o cuando intenta poner datos en un área de memoria
+fuera de los límites del buffer. El más simple de los errores, y la causa más común de los buffer overflows, es el típico caso en el que un programa copia un buffer sin 
+restringir cuanto se está copiando efectivamente. Existen otros casos, pero la existencia de un overflow clásico sugiere fuertemente que el programador no está considerando 
+las más básicas reglas de seguridad. \\
+
+Previamente se conocía esta vulnerabilidad con el nombre de \textbf{Unbounded Transfer ('Classic Buffer Overflow')}. El 14 de Octubre de 2008 se le cambió el nombre por el actual.
+
+\subsubsection{Terminología}
+Términos alternativos
+\begin{itemize}
+    \item \textbf{buffer overrun}
+    \item \textbf{Unbounded Transfer}
+\end{itemize}
+
+Muchos casos que son llamados ``buffer overflows'' son susbstancialmente diferentes al overflow ``clásico'', incluyendo diferentes tipos de bugs que se basan en técnicas 
+de overflow, como errores de signos de enteros, integer overflows y bugs de formatos de strings. Esta terminología imprecisa puede hacer que sea difícil determinar a cual 
+variante se este refiriendo.
+
+\subsubsection{Detalles técnicos del error}
+\begin{tabular}[\baselineskip]{|l|p{7cm}|}
+  \hline
+  \textbf{Categoría} & Manejo Riesgoso de Recursos \\
+  \hline
+  \textbf{Plataforma} & Lenguajes de Programación \\
+  \hline
+  \textbf{Tiempo de Introducción} & Implementación \\
+  \hline
+  \textbf{Lenguaje} & C, C++, Assembly \\
+  \hline
+  \textbf{Probabilidad de \emph{exploit}} & Alta a Muy Alta \\
+  \hline
+\end{tabular} 
+
+\subsubsection{Ejemplos de código}
+
+El siguiente código, escrito en C, le pide al usuario que ingrese su apellido y luego intenta guardar el valor ingresado en el array \texttt{last\_name}.
+
+\begin{lstlisting}[frame=single]
+    char last_name[20];
+    printf ("Enter your last name: ");
+    scanf ("%s", last_name);
+\end{lstlisting}
+
+El problema con este código es que no restringe o limita el tamaño del nombre ingresado por el usuario. Si el usuario ingresa "Very\_very\_long\_last\_name", que tiene 24 carácteres de largo,
+entonces ocurrirá un buffer overflow, ya que el array solo puede contener 20 carácteres en total. \\
+
+El siguiente ejemplo, también un fragmento de código en C, intenta crear un copia local de un buffer para hacer alguna manipulación de los datos.
+
+\begin{lstlisting}[frame=single]
+    void manipulate_string(char* string){
+    char buf[24];
+    strcpy(buf, string);
+    ...
+    }
+\end{lstlisting}
+
+Sin embargo, el programador no se asegura que el tamaño de los datos apuntados por el string entren en el buffer local y copia ciegamente los datos, con la 
+función potencialmente peligrosa \textit{strcpy()}. Esto puede tranquilamente resultar en una condición de \textbf{buffer overflow}
+si un atacante puede influenciar los contenidos del parámetro string. \\
+
+El fragmento siguiente llama a la función \textit{gets()} en C, que es inherentemente insegura.
+
+\begin{lstlisting}[frame=single]
+    char buf[24];
+    printf("Please enter your name and press <Enter>\n");
+    gets(buf);
+\end{lstlisting}
+
+Sin embargo, el programador está usando la función \textit{gets()} que es inherentemente insegura porque intenta copiar ciegamente desde \texttt{STDIN} al buffer sin restringir
+cuanto se copia. Esto permite al usuario proveer una string que sea más larga que el tamaño del buffer, resultando en una condición de overflow.\\
+
+En el siguiente ejemplo, escrito en C++, un servidor acepta conexiones de un cliente y proceso su pedido. Después de aceptar la conexión, el programa obtendrá la información del cliente
+usando el método \textit{gethostbyaddr()}, copiará el hostname del cliente conectaod a una variable local y también lo imprimirá en un archivo de log.
+
+\begin{lstlisting}[frame=single]
+    struct hostent *clienthp;
+    char hostname[MAX_LEN];
+
+    // create server socket, bind to server address and
+    // listen on socket
+    ...
+
+    // accept client connections and process requests
+    int count = 0;
+    for (count = 0; count < MAX_CONNECTIONS; count++) {
+
+        int clientlen = sizeof(struct sockaddr_in);
+        int clientsocket = accept(serversocket, (struct sockaddr *)&clientaddr, &clientlen);
+
+        if (clientsocket >= 0) {
+            clienthp = gethostbyaddr((char*) &clientaddr.sin_addr.s_addr, sizeof(clientaddr.sin_addr.s_addr), AF_INET);
+            strcpy(hostname, clienthp->h_name);
+            logOutput("Accepted client connection from host ", hostname);
+
+            // process client request
+            ...
+            close(clientsocket);
+        }
+    }
+    close(serversocket);
+    ...
+\end{lstlisting}
+
+Sin embargo, el hostname del cliente conectado puede ser más largo que el tamaño allocado para la variable local. Esto resultará en un buffer overflow cuando se copie
+el hostname usando el método \textit{strcpt()}.
+
+\subsubsection{Métodos de detección}
+
+\begin{itemize}
+    \item \textbf{Análisis Estático Automatizado}\\
+        Esta vulnerabilidad puede detectarse muy a menudo utilizando herramientas de análisis estático automatizado. Muchas herramientas modernas usan análisis de flujo de datos
+        or técnicas basadas en constraints para minimizar el número de falsos positivos. En general, no toma en cuenta consideraciones ambientales al reportar overflows. Esto puede
+        hacer que los usuarios encuentren difícil determinar cual warnings investigar primero. Por ejemplo, una herramienta podría reportar buffer overflows originados de argumentos
+        de línea de comandos en un programa que no ,se supone que corra con \textit{setuid} o otros privilegios especiales. 
+        Tiene una alta efectividad. Las técnicas de detección para errores relacionados con buffer overflows están más maduras que para otras vulnerabilidades.
+    \item \textbf{Análisis Dinámico Automatizado}\\
+        Esta vulnerabilidad puede ser detectada usando herramientas y técnicas dinámicas que interactúan con el software usando largos tests con muchas y variadas entradas, como 
+        fuzz testing (\textit{fuzzing}), \textit{robustness testing}, y \textit{fault injection}. Se supone que el software puede ralentizarse, pero no debería volverse inestable, 
+        crashear, o generar resultados incorrectos.
+    \item \textbf{Análisis Manual}\\
+        El análisis manual puede ser útil para encontrar esta vulnerabilidad, pero puede no lograr la cobertura de código deseada dentro los límites de tiempo deseados. Esto se torna
+        complicado para vulnerabilidades donde se deben considerar todas las entradas.
+\end{itemize}
+
+\subsubsection{Nivel de vulnerabilidad}
+
+Los niveles de vulnerabilidad pueden ser 
+
+\begin{itemize}
+    \item \textit{resultante}, lo que significa que la vulnerabilidad está típicamente relacionada con la presencia de alguna otra vulnerabilidad.
+    \item \textit{primario}, lo que significa que la vulnerabilidad existe independientemente de la existencia de otras vulnerabilidades.
+\end{itemize}
+
+\subsubsection{Consecuencias más frecuentes}
+
+\begin{itemize}
+    \item Los buffer overflows pueden ser usados para ejecutar código arbitrario, lo que generalmente está por fuera de las políticas de seguridad de cualquier programa, 
+     y lo cual puede resultar catastrófico. El impacto técnico es entonces, la ejecución no autorizada de código o comandos. Esto representa una falla de integridad, 
+    confidencialidad y disponibilidad.
+    \item Los buffer overflows generalmente llevan a crashes. Otros ataques que llevan a la falta de disponibilidad son posibles incluyendo poner al programa en un loop infinito.
+    El impacto técnico es variado: puede ser un Denial Of Service (DoS), crash, exit, restart, consumo de recursos (CPU). Esto representa una falla de disponibilidad.
+\end{itemize}
+
+\subsubsection{Formas de mitigar el error}
+% TODO
+
+\subsubsection{Ejemplos observados}
+
+\begin{tabular}[\baselineskip]{|p{1.75cm}|p{3.5cm}|p{8cm}|}
+  \hline
+  \textbf{Referencia} & Programa/Aplicación & Resumen de la vulnerabilidad \\
+  \hline
+  \textbf{CVE-2000- 1094} & AOL Instant Messenger(prev 4.3.2229) & Buffer Overflow por usar comando con argumento largo. \\
+  \hline
+  \textbf{CVE-1999- 0046} & rlogin & Buffer Overflow por usar una variable de entorno larga. \\
+  \hline
+  \textbf{CVE-2002- 1337} & Sendmail(5.79 a 8.12.7) & Buffer Overflow por mal parseo de comentarios. \\
+  \hline
+  \textbf{CVE-2003- 0595} & WiTango Application Server and Tango 2000 & Buffer Overflow, por reemplazo de un valor de una cookie por una string extramadamente larga.\\
+  \hline
+  \textbf{CVE-2001- 0191} & gnuserv (XEmacs) & Buffer Overflow, por reemplazo de un valor de una cookie por una string extramadamente larga. \\
+  \hline
+\end{tabular}
