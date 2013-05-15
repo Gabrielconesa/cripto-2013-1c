@@ -149,7 +149,46 @@ Los niveles de vulnerabilidad pueden ser
 \end{itemize}
 
 \subsubsection{Formas de mitigar el error}
-% TODO
+
+Existen multiples maneras de prevenir este error. A continuación se presenta una lista con varias de estas opciones
+
+\begin{itemize}
+    \item Elegir cautelosamente el lenguaje de programación. Esta estrategia debe ser tomada en la fase de análisis de requerimientos del sistema.
+	Basta con elegir un lenguaje de programación que no permita este error o que facilite maneras de evitarlo.
+	Por ejemplo, varios lenguajes que tienen un propio manejo de la memoria, como Java o Perl, no causan overflows.
+    \item Usar librerias o frameworks. 
+	El uso de librerias o frameworks que no permitan o ayuden a prevenir este error también es de buena práctica.
+	Un buen ejemploe es la \textit{Safe C String Library (SafeStr)}.
+	Esto debe ser tenido en cuenta en la fase de arquitectura y diseño.
+    \item Restricciones en la compilación.
+	Una alternativa es correr o compilar el software usando prestaciones o servicios que tengan un mecanismo automático para prevenir este problema.
+	Esta herramienta, usada en el momento de compilar no es una solución completa ya que no detecta todos los tipos de overflow, dejando posible las posibilidades de un ataque.
+    \item Buenas prácticas y costumbres.
+	Como siempre a la hora de la implementación resulta util seguir una guía de buenas prácticas y costumbres.
+	De entre ellas se pueden destacar:
+	
+	* Re chequear si nuestro buffer tiene el tamaño que deseamos.
+	
+	* Al copiar buffers tener en cuenta que el buffer al que se copia se por lo menos tan grande como el original.
+	
+	* Al estar en un ciclo, chequear que los límites del buffer esten siendo respetados, sin escribir en areas no permitidas.
+	
+	* Si es necesario, truncar \textit{strings} a longitudes razonables.
+    \item Validar las entradas.
+	Considerar que toda entrada ajena es maliciosa es una solución al problema, haciendo que solamente sean aceptables las entradas que estrictamente cumplan ciertas especificaciones.
+	Es necesario considerar en este caso todas las propiedades potencialmente relevantes, incluyendo tamaño y tipo de la entrada entre otras.
+	Si bien las \textit{listas negras} pueden ser utiles para detectar potenciales ataques, no son del todo confiables permitiendo en ciertos casos que alguna entrada mal formada o maliciosa 
+	pase los requerimientos.
+    \item Chequeos desde el lado del servidor. Por cada chequeo de seguridad que se haga desde el lado del cliente, es de buena práctica volver a chequearlo desde el lado del servidor para 
+	evitar problemas.
+    \item Reforzar el entorno. Usar alguna característica como \textit{Address Space Layout Randomization (ASLR)} ayuda a prevenir el problema. 
+	Otra forma de reforzar el entorno implica usar una computadora y un sistema operativo que ofrescan capacidades como \textit{Data Execution Protection (NX)}.
+	Estas herramienta tampoco son una solución completa ya que no soluciona todos los posibles ataques.
+    \item Usar funciones que incluyan parametros de longitud. Una buena práctica es sustituir aquellas funciones sin límites de longitud, por otras que sí lo reciban por parametro.
+	Esta estrategía, usada en la implementación es suceptible a errores d cálculo.
+    \item Reducir los permisos o crear entornos reducidos. Al operar con los permisos correctos se puede lograr minimizar un ataque efectivo. Un efecto similar se obtiene al crear un 
+	entorno de operación con límites estrictos.
+\end{itemize}
 
 \subsubsection{Ejemplos observados}
 
