@@ -1,29 +1,55 @@
 \subsection{Uncontrolled Format String}
 
 Esta vulnerabilidad aparece cuando se le da la posibilidad al usuario de controlar el formato de impresión.
-Este error se de normalmente en los sistemas con "logeo" o "internalización y localización", lo que no quiere decir que no pueda pasar en un sistema que no los tenga.
-Solo se da en lenguajes que soportan texto formateado (Ej: C, C++, Pearl).
+Este error se da normalmente en los sistemas con "logeo" o "internalización y localización", lo que no quiere decir que no pueda pasar en un sistema que no los tenga.
 
+
+\subsubsection{Detalles técnicos del error}
+\begin{tabular}[\baselineskip]{|l|p{7cm}|}
+  \hline
+  \textbf{Plataforma} & Independiente. \\
+  \hline
+  \textbf{Lenguaje} & Lenguajes que soportan texto formateado (Ej: C, C++, Pearl). \\
+  \hline
+  \textbf{Probabilidad de \emph{exploit}} & Muy Alto. \\
+  \hline
+\end{tabular}
 
 \subsubsection{Consecuencias}
 
-Un programa afectado por esta vulnerabilidad podria ser manipulado para lograr los siguientes efectos:
+Estos ataques pueden violar la confidencialidad, la integridad y la disponibilidad del sistema.
 
 \begin{itemize}
-
-	\item Problemas de representación de datos
-
-	\item Ver los contenidos del "stack"
-
-	\item Escrivir al "stack"
+ \item Confidencialidad: Puede revelar información oculta. 
+ \item Integridad y disponibilidad: Puede ejecutar codigo arbitrario.
 \end{itemize}
-    
 
+
+\subsubsection{Ejemplos}
+
+\noindent \textbf{Ejemplo en C}\\
+
+\begin{lstlisting}[frame=single]
+int main(int argc, char **argv){
+	char buf[128];
+	...
+	snprintf(buf,128,argv[1]);
+}
+\end{lstlisting}
+Este código permite a un intruso ver el contenido de el stack y escribir a el stack mediante un argumento de línea de 
+comandos que contiene una secuencia de formatos (Ej: %d ,%x ).
+Con un %x uno puede leer del stack.
+Con un %n un atacante puede escrivir en el stack. 
 
 \subsubsection{Detección}
-Prestar atencion a los "warnings" del compilador y linkeditor
-    
-    
+\begin{itemize}
+ \item \textbf{Black Box}
+ 	No es muy efectivo.
+  \item \textbf{Análisis automatizado}
+  	Hay herramientas de analisis estatico que permiten localizar este tipo de vulnerabilidad.
+\end{itemize}
+
+
 \subsubsection{Protección}
 	
 \begin{itemize}
@@ -31,5 +57,7 @@ Prestar atencion a los "warnings" del compilador y linkeditor
 	\item Elegir un lenguage que no sea suceptible a este error.
 
 	\item Asegurarse que todos los "Strings" de formato sean estaticos
+	
+	\item Prestar atencion a los "warnings" del compilador y linkeditor
 	
 \end{itemize}
