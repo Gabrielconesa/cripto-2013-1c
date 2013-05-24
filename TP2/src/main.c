@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 #include "lsb.h"
 #include "common.h"
@@ -28,7 +29,12 @@ int extract(const char* carrierName) {
 
     size_t extractedSize = *((size_t*) output->bytes);
 
-    FILE* out = fopen("extracted", "w");
+    char* extension = (char*) (output->bytes + sizeof(size_t) + extractedSize);
+    char* filename = malloc(sizeof(char) * (strlen("extracted.") + strlen(extension) + 1));
+    strcpy(filename, "extracted.");
+    strcat(filename, extension);
+
+    FILE* out = fopen(filename, "w");
     fwrite(output->bytes + sizeof(size_t), sizeof(unsigned char), extractedSize, out);
     fclose(out);
 
@@ -43,7 +49,9 @@ int embed(const char* carrierName, const char* inputName) {
 
     struct data* image = read_file(carrierName);
     struct data* rawInput = read_file(inputName);
-    prepare_data(rawInput, NULL);
+
+    char* extension = strrchr(inputName, '.') + 1;
+    prepare_data(rawInput, extension);
 
     size_t bitCapacity = lsb_bit_capacity(image->len, 1);
 
