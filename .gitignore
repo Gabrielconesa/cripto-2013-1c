@@ -31,3 +31,8 @@
 *.xdy
 *.tdo
 *.backup
+*.o
+.*.sw[a-z]
+TP2/bin
+tags
+cscope.out
