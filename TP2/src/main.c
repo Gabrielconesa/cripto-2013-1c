@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "lsb1.h"
+#include "lsb.h"
 #include "common.h"
 #include "file.h"
 
@@ -24,7 +24,7 @@ int extract(const char* carrierName) {
     struct data* image = read_file(carrierName);
     struct data* output = malloc(sizeof(struct data));
 
-    lsb1_extract(image, output);
+    lsb_extract(image, output, 1);
 
     size_t extractedSize = *((size_t*) output->bytes);
 
@@ -45,7 +45,7 @@ int embed(const char* carrierName, const char* inputName) {
     struct data* rawInput = read_file(inputName);
     prepare_data(rawInput, NULL);
 
-    size_t bitCapacity = lsb1_bit_capacity(image->len);
+    size_t bitCapacity = lsb_bit_capacity(image->len, 1);
 
     if (bitCapacity < rawInput->len * 8) {
         printf("The carrier is not big enough. It can only carry %u bytes.\n", bitCapacity / 8);
@@ -56,7 +56,7 @@ int embed(const char* carrierName, const char* inputName) {
         return 1;
     }
 
-    lsb1_embed(image, rawInput);
+    lsb_embed(image, rawInput, 1);
 
     FILE* out = fopen("out", "w");
     fwrite(image->bytes, sizeof(unsigned char), image->len, out);
