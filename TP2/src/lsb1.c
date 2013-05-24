@@ -1,35 +1,33 @@
 #include "lsb1.h"
 #include <string.h>
 
-void lsb1_embed(struct image* img, struct data* data) {
+void lsb1_embed(struct data* img, struct data* data) {
 
-    assert(data->len * 8 > lsb1_bit_capacity(img->pixels));
+    assert(data->len * 8 < lsb1_bit_capacity(img->len));
     size_t byteOnImage = BMP_HEADER_SIZE;
 
     for (size_t byte = 0; byte < data->len; byte++) {
 
         for (size_t bitOnByte = 0; bitOnByte < 8; bitOnByte++, byteOnImage++) {
-            img->raw[byteOnImage] ^= img->raw[byteOnImage] & 0x1;
-            img->raw[byteOnImage] |= (data->bytes[byte / 8] >> bitOnByte) & 0x1;
+            img->bytes[byteOnImage] ^= img->bytes[byteOnImage] & 0x1;
+            img->bytes[byteOnImage] |= (data->bytes[byte / 8] >> bitOnByte) & 0x1;
         }
 
     }
 }
 
-void lsb1_extract(struct image* source, struct data* out) {
+void lsb1_extract(struct data* source, struct data* out) {
 
-    size_t maxOutputSize = (3 * source->pixels) / 8;
+    size_t maxOutputSize =  lsb1_bit_capacity(source->len) / 8;
     unsigned char* buffer = malloc(sizeof(unsigned char) * maxOutputSize);
     memset(buffer, 0, maxOutputSize);
-
-    size_t bytesInImage = BMP_HEADER_SIZE + source->pixels * 3;
 
     size_t byte = 0;
     size_t bitOnByte = 0;
 
-    for (size_t byteOnImage = BMP_HEADER_SIZE; byteOnImage < bytesInImage; byteOnImage++) {
+    for (size_t byteOnImage = BMP_HEADER_SIZE; byteOnImage < source->len; byteOnImage++) {
 
-        buffer[byte] |= (source->raw[byteOnImage] & 0x1) >> bitOnByte;
+        buffer[byte] |= (source->bytes[byteOnImage] & 0x1) >> bitOnByte;
 
         bitOnByte++;
         if (bitOnByte == 8) {
@@ -43,7 +41,7 @@ void lsb1_extract(struct image* source, struct data* out) {
     out->bytes = buffer;
 }
 
-size_t lsb1_bit_capacity(size_t pixelsInImage) {
-    return pixelsInImage * 3;
+size_t lsb1_bit_capacity(size_t size) {
+    return size - BMP_HEADER_SIZE;
 }
 
