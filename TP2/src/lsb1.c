@@ -3,10 +3,9 @@
 
 enum embed_result lsb1_embed(struct image* img, struct data* data) {
 
-    if (data->len * 8 > img->pixels * 3) {
+    if (data->len * 8 > lsb1_bit_capacity(img->pixels)) {
         return EMBED_TOO_SMALL;
     }
-
 
     size_t byteOnImage = BMP_HEADER_SIZE;
 
@@ -54,5 +53,9 @@ int lsb1_extract(struct image* source, struct data* out) {
     memcpy(out->bytes, buffer + 4, out->len);
 
     return 0;
+}
+
+size_t lsb1_bit_capacity(size_t pixelsInImage) {
+    return pixelsInImage * 3;
 }
 
