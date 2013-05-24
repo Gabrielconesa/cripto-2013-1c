@@ -10,22 +10,25 @@ int main(int argc, char *argv[]) {
     // Quick & dirty params:
     //  in file
     //  carrier
-    assert(argc > 2);
+    assert(argc > 3);
 
-    if (strcmp(argv[1], "e") == 0) {
-        assert(argc == 4);
-        return embed(argv[2], argv[3]);
+    size_t n = atoi(argv[1]);
+    assert(n == 1 || n == 4);
+
+    if (strcmp(argv[2], "e") == 0) {
+        assert(argc == 5);
+        return embed(n, argv[3], argv[4]);
     } else {
-        assert(argc == 3);
-        return extract(argv[2]);
+        assert(argc == 4);
+        return extract(n, argv[3]);
     }
 }
 
-int extract(const char* carrierName) {
+int extract(size_t n, const char* carrierName) {
     struct data* image = read_file(carrierName);
     struct data* output = malloc(sizeof(struct data));
 
-    lsb_extract(image, output, 1);
+    lsb_extract(image, output, n);
 
     size_t extractedSize = *((size_t*) output->bytes);
 
@@ -45,15 +48,18 @@ int extract(const char* carrierName) {
 }
 
 
-int embed(const char* carrierName, const char* inputName) {
+int embed(size_t n, const char* carrierName, const char* inputName) {
 
     struct data* image = read_file(carrierName);
     struct data* rawInput = read_file(inputName);
 
-    char* extension = strrchr(inputName, '.') + 1;
+    char* extension = strrchr(inputName, '.');
+    if (extension) {
+        extension += 1;
+    }
     prepare_data(rawInput, extension);
 
-    size_t bitCapacity = lsb_bit_capacity(image->len, 1);
+    size_t bitCapacity = lsb_bit_capacity(image->len, n);
 
     if (bitCapacity < rawInput->len * 8) {
         printf("The carrier is not big enough. It can only carry %u bytes.\n", bitCapacity / 8);
@@ -64,7 +70,7 @@ int embed(const char* carrierName, const char* inputName) {
         return 1;
     }
 
-    lsb_embed(image, rawInput, 1);
+    lsb_embed(image, rawInput, n);
 
     FILE* out = fopen("out", "w");
     fwrite(image->bytes, sizeof(unsigned char), image->len, out);
