@@ -18,9 +18,9 @@ void prepare_data(struct data* data, const char* suffix) {
 
     assert(data);
 
-    size_t newLength = sizeof(size_t) + data->len;
+    size_t newLength = sizeof(size_t) + data->len + 1;
     if (suffix) {
-        newLength += strlen(suffix) + 1;
+        newLength += strlen(suffix);
     }
 
     unsigned char* buffer = malloc(sizeof(unsigned char) * newLength);
@@ -32,6 +32,8 @@ void prepare_data(struct data* data, const char* suffix) {
     if (suffix) {
         strcpy(buffer + sizeof(size_t) + data->len, suffix);
     }
+
+    buffer[newLength - 1] = 0;
 
     free(data->bytes);
 
