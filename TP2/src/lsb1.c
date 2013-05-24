@@ -1,12 +1,9 @@
 #include "lsb1.h"
 #include <string.h>
 
-enum embed_result lsb1_embed(struct image* img, struct data* data) {
+void lsb1_embed(struct image* img, struct data* data) {
 
-    if (data->len * 8 > lsb1_bit_capacity(img->pixels)) {
-        return EMBED_TOO_SMALL;
-    }
-
+    assert(data->len * 8 > lsb1_bit_capacity(img->pixels));
     size_t byteOnImage = BMP_HEADER_SIZE;
 
     for (size_t byte = 0; byte < data->len; byte++) {
@@ -17,11 +14,9 @@ enum embed_result lsb1_embed(struct image* img, struct data* data) {
         }
 
     }
-
-    return EMBED_SUCCESS;
 }
 
-int lsb1_extract(struct image* source, struct data* out) {
+void lsb1_extract(struct image* source, struct data* out) {
 
     size_t maxOutputSize = (3 * source->pixels) / 8;
     unsigned char* buffer = malloc(sizeof(unsigned char) * maxOutputSize);
@@ -44,15 +39,8 @@ int lsb1_extract(struct image* source, struct data* out) {
 
     }
 
-    out->len = (buffer[0] << 24) | (buffer[1] << 16) | (buffer[2] << 8) | buffer[3];
-    out->bytes = malloc(sizeof(unsigned char) * out->len);
-    if (out->bytes == NULL) {
-        return 0;
-    }
-
-    memcpy(out->bytes, buffer + 4, out->len);
-
-    return 0;
+    out->len = maxOutputSize;
+    out->bytes = buffer;
 }
 
 size_t lsb1_bit_capacity(size_t pixelsInImage) {
