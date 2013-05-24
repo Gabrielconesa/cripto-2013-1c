@@ -10,9 +10,6 @@ struct data {
     unsigned char* bytes; // Either encripted or not. if unencrypted, should include extension
 };
 
-struct image {
-    size_t pixels;
-    unsigned char* raw; // Includes header
-};
+void free_data(struct data* data);
 
 #endif
