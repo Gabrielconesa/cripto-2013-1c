@@ -12,4 +12,6 @@ struct data {
 
 void free_data(struct data* data);
 
+void prepare_data(struct data* data, const char* suffix);
+
 #endif

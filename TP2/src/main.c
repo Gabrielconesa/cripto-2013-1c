@@ -26,8 +26,10 @@ int extract(const char* carrierName) {
 
     lsb1_extract(image, output);
 
+    size_t extractedSize = *((size_t*) output->bytes);
+
     FILE* out = fopen("extracted", "w");
-    fwrite(output->bytes, sizeof(unsigned char), output->len, out);
+    fwrite(output->bytes + sizeof(size_t), sizeof(unsigned char), extractedSize, out);
     fclose(out);
 
     free_data(image);
@@ -41,6 +43,7 @@ int embed(const char* carrierName, const char* inputName) {
 
     struct data* image = read_file(carrierName);
     struct data* rawInput = read_file(inputName);
+    prepare_data(rawInput, NULL);
 
     size_t bitCapacity = lsb1_bit_capacity(image->len);
 
