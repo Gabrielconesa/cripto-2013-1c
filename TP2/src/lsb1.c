@@ -1,7 +1,7 @@
 #include "lsb1.h"
 #include <string.h>
 
-enum embed_result lsb4_embed(struct image* img, struct data* data) {
+enum embed_result lsb1_embed(struct image* img, struct data* data) {
 
     if (data->len * 8 > img->pixels * 3) {
         return EMBED_TOO_SMALL;
@@ -22,7 +22,7 @@ enum embed_result lsb4_embed(struct image* img, struct data* data) {
     return EMBED_SUCCESS;
 }
 
-int lsb4_extract(struct image* source, struct data* out) {
+int lsb1_extract(struct image* source, struct data* out) {
 
     size_t maxOutputSize = (3 * source->pixels) / 8;
     unsigned char* buffer = malloc(sizeof(unsigned char) * maxOutputSize);

@@ -3,8 +3,8 @@
 
 #include "common.h"
 
-enum embed_result lsb4_embed(struct image* img, struct data* data);
+enum embed_result lsb1_embed(struct image* img, struct data* data);
 
-int lsb4_extract(struct image* source, struct data* out);
+int lsb1_extract(struct image* source, struct data* out);
 
 #endif
