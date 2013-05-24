@@ -10,7 +10,7 @@ void lsb1_embed(struct data* img, struct data* data) {
 
         for (size_t bitOnByte = 0; bitOnByte < 8; bitOnByte++, byteOnImage++) {
             img->bytes[byteOnImage] ^= img->bytes[byteOnImage] & 0x1;
-            img->bytes[byteOnImage] |= (data->bytes[byte / 8] >> bitOnByte) & 0x1;
+            img->bytes[byteOnImage] |= (data->bytes[byte] >> bitOnByte) & 0x1;
         }
 
     }
@@ -27,7 +27,7 @@ void lsb1_extract(struct data* source, struct data* out) {
 
     for (size_t byteOnImage = BMP_HEADER_SIZE; byteOnImage < source->len; byteOnImage++) {
 
-        buffer[byte] |= (source->bytes[byteOnImage] & 0x1) >> bitOnByte;
+        buffer[byte] |= (source->bytes[byteOnImage] & 0x1) << bitOnByte;
 
         bitOnByte++;
         if (bitOnByte == 8) {
