@@ -1,7 +1,7 @@
 CFLAGS=-fno-builtin -I$(SRCDIR) -pedantic -std=c99 -fstrict-aliasing -Wall -Wextra -Wshadow -Wcast-qual \
 	-Wwrite-strings -Wpointer-arith -Wcast-align -Wmissing-prototypes \
 	-Wmissing-declarations -Wredundant-decls -Wnested-externs -Winline \
-	-Wstrict-prototypes -Wunreachable-code 
+	-Wstrict-prototypes -Wunreachable-code -include $(SRCDIR)/global.h
 
 SRCDIR=../src
 OBJDIR=../bin

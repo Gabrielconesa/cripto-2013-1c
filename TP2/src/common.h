@@ -15,9 +15,4 @@ struct image {
     unsigned char* raw; // Includes header
 };
 
-enum embed_result {
-    EMBED_SUCCESS,
-    EMBED_TOO_SMALL
-};
-
 #endif
