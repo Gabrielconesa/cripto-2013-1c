@@ -44,6 +44,6 @@ void lsb_extract(struct data* source, struct data* out, size_t n) {
 }
 
 size_t lsb_bit_capacity(size_t size, size_t n) {
-    return (size - BMP_HEADER_SIZE) / n;
+    return (size - BMP_HEADER_SIZE) * n;
 }
 
