@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <getopt.h>
 
 #include "lsb.h"
 #include "common.h"
@@ -7,26 +8,131 @@
 #include "lsbe.h"
 #include "crypt.h"
 
+static const char* short_opts = "p:a:m:";
+
+static const struct option opts[] = {
+    { "embed", no_argument, NULL, 'e' },
+    { "in", required_argument, NULL, 'I' },
+    { "out", required_argument, NULL, 'O' },
+    { "steg", required_argument, NULL, 's' },
+    { "pass", required_argument, NULL, 'P' },
+    { "extract", no_argument, NULL, 'x' },
+    { NULL, no_argument, NULL, 0 }
+};
+
+#define opt_error(str) { printf(str "\n"); abort(); }
+
 int main(int argc, char *argv[]) {
 
-    // Quick & dirty params:
-    //  in file
-    //  carrier
-    assert(argc > 3);
 
-    size_t n = atoi(argv[1]);
-    assert(n == 0 || n == 1 || n == 4);
+    const char* carrierName = NULL;
+    const char* inputName = NULL;
+    const char* outputName = NULL;
+    const char* steg = NULL;
+    const char* pass = NULL;
+    const char* cipherOption = "aes128";
+    const char* modeOption = "cbc";
+    int op = -1;
 
-    if (strcmp(argv[2], "e") == 0) {
-        assert(argc == 5);
-        return embed(n, argv[3], argv[4]);
+    int res;
+    while ((res = getopt_long_only(argc, argv, short_opts, opts, NULL)) != -1) {
+
+        switch (res) {
+            case 'p':
+                carrierName = optarg;
+                break;
+            case 'a':
+                cipherOption = optarg;
+                break;
+            case 'm':
+                modeOption = optarg;
+                break;
+            case 'e':
+                op = 0;
+                break;
+            case 'x':
+                op = 1;
+                break;
+            case 'I':
+                inputName = optarg;
+                break;
+            case 'O':
+                outputName = optarg;
+                break;
+            case 's':
+                steg = optarg;
+                break;
+            case 'P':
+                pass = optarg;
+                break;
+            default:
+                opt_error("Invalid parameter");
+        }
+
+    }
+
+    int n;
+    if (steg == NULL) {
+        opt_error("You must specify an algorithm");
+    } else if (strcmp(steg, "LSB1") == 0) {
+        n = 1;
+    } else if (strcmp(steg, "LSB4") == 0) {
+        n = 4;
+    } else if (strcmp(steg, "LSBE") == 0) {
+        n = 0;
     } else {
-        assert(argc == 4);
-        return extract(n, argv[3]);
+        opt_error("You must specify a valid algorithm");
+    }
+
+    if (carrierName == NULL || !can_access(carrierName)) {
+        opt_error("Can't open carrier file");
+    }
+
+    if (outputName == NULL || strlen(outputName) == 0) {
+        opt_error("Output file name must be present.");
+    }
+
+    enum cipher cipher;
+    if (strcmp(cipherOption, "aes128") == 0) {
+        cipher = CIPHER_AES_128;
+    } else if (strcmp(cipherOption, "aes192") == 0) {
+        cipher = CIPHER_AES_192;
+    } else if (strcmp(cipherOption, "aes256") == 0) {
+        cipher = CIPHER_AES_256;
+    } else if (strcmp(cipherOption, "des") == 0) {
+        cipher = CIPHER_DES;
+    } else {
+        opt_error("Invalid cipher algorithm value");
+    }
+
+    enum cipher_mode mode;
+    if (strcmp(modeOption, "cbc") == 0) {
+        mode = MODE_CBC;
+    } else if (strcmp(modeOption, "ofb") == 0) {
+        mode = MODE_OFB;
+    } else if (strcmp(modeOption, "ecb") == 0) {
+        mode = MODE_ECB;
+    } else if (strcmp(modeOption, "cfb") == 0) {
+        mode = MODE_CFB;
+    } else {
+        opt_error("Invalid cipher chain mode value");
+    }
+
+    if (op == -1) {
+        opt_error("You must specify whether to extract or embed");
+    } else if (op == 1) {
+        return extract(n, carrierName, outputName, pass, cipher, mode);
+    } else {
+
+        if (inputName == NULL || !can_access(inputName)) {
+            opt_error("Can't open input file");
+        }
+
+        return embed(n, carrierName, inputName, outputName, pass, cipher, mode);
     }
 }
 
-int extract(size_t n, const char* carrierName) {
+int extract(size_t n, const char* carrierName, const char* outputName, const char* password, const enum cipher cipher, const enum cipher_mode mode) {
 
     struct data* image = read_file(carrierName);
     struct data* rawOutput = malloc(sizeof(struct data));
@@ -37,14 +143,20 @@ int extract(size_t n, const char* carrierName) {
         lsb_extract(image, rawOutput, n);
     }
 
-    struct data* output = decrypt(unpack_data(rawOutput), CIPHER_AES_256, MODE_CBC, "fooodario");
-    free_data(rawOutput);
+    struct data* output;
+    if (password) {
+        output = decrypt(unpack_data(rawOutput), cipher, mode, password);
+        free_data(rawOutput);
+    } else {
+        output = rawOutput;
+    }
 
     size_t extractedSize = *((size_t*) output->bytes);
 
     char* extension = (char*) (output->bytes + sizeof(size_t) + extractedSize);
-    char* filename = malloc(sizeof(char) * (strlen("extracted.") + strlen(extension) + 1));
-    strcpy(filename, "extracted.");
+    char* filename = malloc(sizeof(char) * (strlen(outputName) + strlen(extension) + 1));
+    strcpy(filename, outputName);
+    strcat(filename, ".");
     strcat(filename, extension);
 
     FILE* out = fopen(filename, "w");
@@ -58,7 +170,7 @@ int extract(size_t n, const char* carrierName) {
 }
 
 
-int embed(size_t n, const char* carrierName, const char* inputName) {
+int embed(size_t n, const char* carrierName, const char* inputName, const char* outputName, const char* password, const enum cipher cipher, const enum cipher_mode mode) {
 
     struct data* image = read_file(carrierName);
     struct data* rawInput = read_file(inputName);
@@ -69,10 +181,15 @@ int embed(size_t n, const char* carrierName, const char* inputName) {
     }
     prepare_data(rawInput, extension);
 
-    struct data* input = encrypt(rawInput, CIPHER_AES_256, MODE_CBC, "fooodario");
-    prepare_data(input, NULL);
+    struct data* input;
+    if (password) {
+        input = encrypt(rawInput, cipher, mode, password);
+        prepare_data(input, NULL);
+        free_data(rawInput);
+    } else {
+        input = rawInput;
+    }
 
-    free_data(rawInput);
 
     size_t bitCapacity;
     if (n == 0) {
@@ -96,7 +213,7 @@ int embed(size_t n, const char* carrierName, const char* inputName) {
         lsb_embed(image, input, n);
     }
 
-    FILE* out = fopen("out", "w");
+    FILE* out = fopen(outputName, "w");
     fwrite(image->bytes, sizeof(unsigned char), image->len, out);
     fclose(out);
 
