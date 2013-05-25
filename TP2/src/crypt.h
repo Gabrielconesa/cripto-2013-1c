@@ -7,7 +7,7 @@ enum cipher {
     CIPHER_AES_128,
     CIPHER_AES_192,
     CIPHER_AES_256,
-    CIPER_DES
+    CIPHER_DES
 };
 
 enum cipher_mode {
