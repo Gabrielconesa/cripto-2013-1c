@@ -12,7 +12,6 @@ size_t get_key_length(const enum cipher cipher);
 
 struct data* encrypt(const struct data* in, const enum cipher cipher, const enum cipher_mode mode, const char* password) {
 
-    assert(cipher == CIPHER_AES_256 && mode == MODE_CBC);
     assert(password);
     assert(in);
 
@@ -60,7 +59,6 @@ struct data* encrypt(const struct data* in, const enum cipher cipher, const enum
 
 struct data* decrypt(const struct data* in, const enum cipher cipher, const enum cipher_mode mode, const char* password) {
 
-    assert(cipher == CIPHER_AES_256 && mode == MODE_CBC);
     assert(password);
     assert(in);
 
