@@ -37,3 +37,14 @@ struct data* read_file(const char* filename) {
     return data;
 }
 
+int can_access(const char* filename) {
+    FILE* file = fopen(filename, "r+");
+
+    if (!file) {
+        return 0;
+    } else {
+        fclose(file);
+        return 1;
+    }
+}
+
