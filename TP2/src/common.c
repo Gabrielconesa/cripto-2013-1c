@@ -41,3 +41,20 @@ void prepare_data(struct data* data, const char* suffix) {
     data->len = newLength;
 }
 
+struct data* unpack_data(struct data* packed) {
+
+    assert(packed);
+
+    packed->len = *((size_t*) packed->bytes);
+
+    unsigned char* buffer = malloc(packed->len);
+    assert(buffer);
+
+    memcpy(buffer, packed->bytes + sizeof(size_t), packed->len);
+    free(packed->bytes);
+
+    packed->bytes = buffer;
+
+    return packed;
+}
+
