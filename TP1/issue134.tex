@@ -1,7 +1,7 @@
 \subsection{Uncontrolled Format String}
 
 Esta vulnerabilidad aparece cuando se le da la posibilidad al usuario de controlar el formato de impresión.
-Este error se da normalmente en los sistemas con "logeo" o "internalización y localización", lo que no quiere decir que no pueda pasar en un sistema que no los tenga.
+Este error se da normalmente en los sistemas con ``logeo'' o ``internalización y localización'' lo que no quiere decir que no pueda pasar en un sistema que no los tenga.
 
 
 \subsubsection{Detalles técnicos del error}
@@ -9,7 +9,7 @@ Este error se da normalmente en los sistemas con "logeo" o "internalización y l
   \hline
   \textbf{Plataforma} & Independiente. \\
   \hline
-  \textbf{Lenguaje} & Lenguajes que soportan texto formateado (Ej: C, C++, Pearl). \\
+  \textbf{Lenguaje} & Lenguajes que soportan texto formateado (Ej: C, C++, Perl). \\
   \hline
   \textbf{Probabilidad de \emph{exploit}} & Muy Alto. \\
   \hline
@@ -37,9 +37,9 @@ int main(int argc, char **argv){
 }
 \end{lstlisting}
 Este código permite a un intruso ver el contenido de el stack y escribir a el stack mediante un argumento de línea de 
-comandos que contiene una secuencia de formatos (Ej: %d ,%x ).
-Con un %x uno puede leer del stack.
-Con un %n un atacante puede escrivir en el stack. 
+comandos que contiene una secuencia de formatos (Ej: \%d ,\%x ).
+Con un \%x uno puede leer del stack.
+Con un \%n un atacante puede escribir en el stack. 
 
 \subsubsection{Detección}
 \begin{itemize}
