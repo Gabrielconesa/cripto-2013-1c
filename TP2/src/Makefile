@@ -2,6 +2,7 @@ CFLAGS=-fno-builtin -I$(SRCDIR) -pedantic -std=c99 -fstrict-aliasing -Wall -Wext
 	-Wwrite-strings -Wpointer-arith -Wcast-align -Wmissing-prototypes \
 	-Wmissing-declarations -Wredundant-decls -Wnested-externs -Winline \
 	-Wstrict-prototypes -Wunreachable-code -include $(SRCDIR)/global.h
+LDFLAGS=-lcrypto
 
 SRCDIR=../src
 OBJDIR=../bin

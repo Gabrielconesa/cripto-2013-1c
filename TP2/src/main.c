@@ -5,6 +5,7 @@
 #include "common.h"
 #include "file.h"
 #include "lsbe.h"
+#include "crypt.h"
 
 int main(int argc, char *argv[]) {
 
@@ -28,13 +29,16 @@ int main(int argc, char *argv[]) {
 int extract(size_t n, const char* carrierName) {
 
     struct data* image = read_file(carrierName);
-    struct data* output = malloc(sizeof(struct data));
+    struct data* rawOutput = malloc(sizeof(struct data));
 
     if (n == 0) {
-        lsbe_extract(image, output);
+        lsbe_extract(image, rawOutput);
     } else {
-        lsb_extract(image, output, n);
+        lsb_extract(image, rawOutput, n);
     }
+
+    struct data* output = decrypt(unpack_data(rawOutput), CIPHER_AES_256, MODE_CBC, "fooodario");
+    free_data(rawOutput);
 
     size_t extractedSize = *((size_t*) output->bytes);
 
@@ -65,6 +69,11 @@ int embed(size_t n, const char* carrierName, const char* inputName) {
     }
     prepare_data(rawInput, extension);
 
+    struct data* input = encrypt(rawInput, CIPHER_AES_256, MODE_CBC, "fooodario");
+    prepare_data(input, NULL);
+
+    free_data(rawInput);
+
     size_t bitCapacity;
     if (n == 0) {
         bitCapacity = lsbe_bit_capacity(image);
@@ -72,19 +81,19 @@ int embed(size_t n, const char* carrierName, const char* inputName) {
         bitCapacity = lsb_bit_capacity(image->len, n);
     }
 
-    if (bitCapacity < rawInput->len * 8) {
+    if (bitCapacity < input->len * 8) {
         printf("The carrier is not big enough. It can only carry %u bytes.\n", bitCapacity / 8);
 
         free_data(image);
-        free_data(rawInput);
+        free_data(input);
 
         return 1;
     }
 
     if (n == 0) {
-        lsbe_embed(image, rawInput);
+        lsbe_embed(image, input);
     } else {
-        lsb_embed(image, rawInput, n);
+        lsb_embed(image, input, n);
     }
 
     FILE* out = fopen("out", "w");
@@ -92,7 +101,7 @@ int embed(size_t n, const char* carrierName, const char* inputName) {
     fclose(out);
 
     free_data(image);
-    free_data(rawInput);
+    free_data(input);
 
     return 0;
 }
