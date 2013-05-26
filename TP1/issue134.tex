@@ -2,9 +2,10 @@
 
 \subsubsection{Descripción del error}
 
-Esta vulnerabilidad aparece cuando se le da la posibilidad al usuario de controlar el formato de impresión.
-Este error se da normalmente en los sistemas con ``logeo'' o ``internalización y localización'' lo que no quiere decir que no pueda pasar en un sistema que no los tenga.
-
+Esta vulnerabilidad aparece cuando se le da la posibilidad al usuario de controlar el
+formato de un \textit{string}, habitualmente en funciones del estilo de \texttt{printf()}.
+Este error se da normalmente en los sistemas con ``logueo'' o ``internacionalización y
+localización'' lo que no quiere decir que no pueda pasar en un sistema que no los tenga.
 
 \subsubsection{Detalles técnicos del error}
 \begin{tabular}[\baselineskip]{|l|p{7cm}|}
@@ -32,8 +33,8 @@ int main(int argc, char **argv){
 	snprintf(buf,128,argv[1]);
 }
 \end{lstlisting}
-Este código permite a un intruso ver el contenido del \textit{stack} y escribir al \textit{stack} mediante un argumento de línea de
-comandos que contiene una secuencia de formatos (Ej: \%d ,\%x ).
+
+Este código permite a un intruso ver el contenido del \textit{stack} y escribir al \textit{stack} mediante un argumento de línea de comandos que contiene una secuencia de formatos (Ej: \%d ,\%x ).
 Con un \%x se puede leer contenido del \textit{stack}, mientras que con un \%n, un atacante puede escribir en el \textit{stack}.
 
 \subsubsection{Métodos de detección}
@@ -48,7 +49,6 @@ Con un \%x se puede leer contenido del \textit{stack}, mientras que con un \%n, 
 
 El nivel de vulnerabilidad es \textit{primario}, lo que significa que la vulnerabilidad existe independientemente de la existencia de otras vulnerabilidades.
 
-
 \subsubsection{Consecuencias más frecuentes}
 
 Estos ataques pueden violar la confidencialidad, la integridad y la disponibilidad del sistema.
@@ -56,7 +56,7 @@ Estos ataques pueden violar la confidencialidad, la integridad y la disponibilid
 \begin{itemize}
  \item Confidencialidad\\
     Se puede revelar información oculta.
- \item Integridad y disponibilidad\\ 
+ \item Integridad y disponibilidad\\
     Se puede ejecutar código arbitrario.
 \end{itemize}
 
