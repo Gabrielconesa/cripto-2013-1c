@@ -2,16 +2,27 @@
 
 \subsubsection{Descripción del error}
 
-Este error se da cuando un programa hace uso de entrada externa para acceder a recursos del file system.
-Si no se valida y limita correctamente a que recursos se puede acceder, un atacante puede obtener informacion privilegiada o vulnerar el programa y/o sistema en el que corre.
+Esta vulnerabilidad se da cuando un programa hace uso de entrada externa para acceder a recursos del \textit{file system}.
+Si no se valida y limita correctamente a qué recursos se puede acceder, un atacante puede obtener información privilegiada o vulnerar el programa y/o sistema en el que corre.
 
-Todo sistema que haga manejo de recursos del file system se encuentra potencialmente afectado por esta vulnerabilidad.
+Todo sistema que haga manejo de recursos del \textit{file system} se encuentra potencialmente afectado por esta vulnerabilidad.
 No depende del sistema operativo ni del lenguaje utilizado.
 Algunos lenguajes pueden ofrecer mecanismos para mitigar este ataque, pero deben ser correctamente configurados para esto.
 
 \subsubsection{Detalles técnicos del error}
-
-TODO
+\begin{tabular}[\baselineskip]{|l|p{7cm}|}
+  \hline
+  \textbf{Categoría} & Manejo Riesgoso de Recursos \\
+  \hline
+  \textbf{Plataforma} & Independiente. \\
+  \hline
+  \textbf{Tiempo de Introducción} &  Arquitectura y Diseño. Implementación. \\
+  \hline
+  \textbf{Lenguaje} & Independiente.\\
+  \hline
+  \textbf{Probabilidad de \emph{exploit}} & Alta a Muy Alta \\
+  \hline
+\end{tabular}
 
 \subsubsection{Ejemplos de código}
 
@@ -23,47 +34,55 @@ include($_GET['file']);
 ?>
 \end{lstlisting}
 
-Si este script se encuentra en un sistema \textit{Linux} podemos obtener la lista de usuarios del sistema y sus contraseñas encriptadas haciendo un request a \texttt{/vulnerable.php?file=/etc/passwd}.
-
-(TODO: Ver que la linea se nos va con el ancho)
+Si este script se encuentra en un sistema \textit{Linux} podemos obtener la lista de usuarios del sistema y sus contraseñas encriptadas haciendo un request a \\
+\texttt{/vulnerable.php?file=/etc/passwd}.
 
 \subsubsection{Métodos de detección}
 
-En lenguajes donde este disponible, herramientas de analisis estatico pueden facilmente detectar potenciales casos de \textit{Path Traversal}. Es posible que se encuentre con falsos positivos, donde la funcionalidad sea deseada para administradores o usuarios con suficientes privilegios.
-En caso de no disponer de herramientas de analisis estatico, el uso de \textit{White Box testing} puede detectar ocurrencias de esta clase de vulnerabilidad.
+En lenguajes donde estén disponibles, herramientas de análisis estático pueden fácilmente detectar potenciales casos de \textit{Path Traversal}. Es posible que se encuentre con falsos positivos, donde la funcionalidad sea deseada para administradores o usuarios con suficientes privilegios.
+En caso de no disponer de herramientas de análisis estático, el uso de \textit{White Box testing} puede detectar ocurrencias de esta clase de vulnerabilidad.
 
 \subsubsection{Nivel de vulnerabilidad}
 
-TODO
+Los niveles de vulnerabilidad pueden ser
+
+\begin{itemize}
+    \item \textit{primario}, lo que significa que la vulnerabilidad existe independientemente de la existencia de otras vulnerabilidades.
+    \item \textit{resultante}, lo que significa que la vulnerabilidad está típicamente relacionada con la presencia de alguna otra vulnerabilidad.
+\end{itemize}
+
 
 \subsubsection{Consecuencias más frecuentes}
 
-Un programa afectado por esta vulnerabilidad podria ser manipulado para lograr los siguientes efectos:
+Un programa afectado por esta vulnerabilidad podría ser manipulado para lograr los siguientes efectos:
 
 \begin{itemize}
 
-    \item Modificar archivos criticos del sistema o programa para alterar el comportamiento del mismo o otros programas en el sistema
+    \item Modificar archivos críticos del sistema o programa para alterar el comportamiento del mismo o otros programas en el sistema.
 
-    \item Otorgarle al atacante acceso a partes seguras del sistema alterando archivos de seguridad
+    \item Otorgarle al atacante acceso a partes seguras del sistema alterando archivos de seguridad.
 
-    \item El atacante podria obtener acceso de lectura a archivos con informacion sensible, potencialmente otorgandole informacion de otros usuarios del sistema o informacion de seguridad del mismo
+    \item El atacante podría obtener acceso de lectura a archivos con información sensible, potencialmente otorgándole información de otros usuarios del sistema o información de seguridad del mismo.
 
 \end{itemize}
 
 \subsubsection{Formas de mitigar el error}
 
 Existen numerosas maneras de proteger un programa de este tipo de error.
-Como en toda vulnerabilidad de entrada externa maliciosa, se debe tratar como potencialmente hostil toda entrada, incluso si viene de una fuente confiado.
+Como en toda vulnerabilidad de entrada externa maliciosa, se debe tratar como potencialmente hostil toda entrada, incluso si viene de una fuente confiada.
 
-Se puede utilizar tecnicas de \textit{White listing} y \textit{Black listing}.
+Se puede utilizar técnicas de \textit{White listing} y \textit{Black listing}.
 Es decir comparar la entrada contra una lista de valores conocidos que sean considerados seguros o no.
 En este caso, el uso de \textit{Black listing} no alcanza para protegerse, ya que es posible que la lista no contenga todas las posibles combinaciones maliciosas.
 
-Ejecutar el programa dentro de un \textit{sandbox} puede ofrecer proteccion limitada contra vulnerar el sistema.
-Pero no ofrece proteccion a los recursos dentro del alcanze del programa.
-Un atacante podria obtener acceso privilegiado al programa, y usar este acceso para forzar al programa a salir del \textit{sandbox}, obteniendo acceso al sistema.
+Ejecutar el programa dentro de un \textit{sandbox} puede ofrecer protección limitada.
+Pero no ofrece protección a los recursos dentro del alcance del programa.
+Un atacante podría obtener acceso privilegiado al programa, y usar este acceso para forzar al programa a salir del \textit{sandbox}, obteniendo acceso al sistema.
 
 La mejor forma de evitar este tipo de problema es hacer uso de funciones de \textit{path canonicalization}.
 Si se resuelve el \textit{path} resultante de la entrada del usuario, se puede verificar correctamente usando \textit{white listing} que no se intente manipular recursos fuera de los permitidos.
 
 
+\subsubsection{Ejemplos observados}
+
+TODO

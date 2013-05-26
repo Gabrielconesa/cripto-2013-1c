@@ -9,11 +9,15 @@ Este error se da normalmente en los sistemas con ``logeo'' o ``internalización 
 \subsubsection{Detalles técnicos del error}
 \begin{tabular}[\baselineskip]{|l|p{7cm}|}
   \hline
+  \textbf{Categoría} & Manejo Riesgoso de Recursos \\
+  \hline
   \textbf{Plataforma} & Independiente. \\
+  \hline
+  \textbf{Tiempo de Introducción} & Implementación \\
   \hline
   \textbf{Lenguaje} & Lenguajes que soportan texto formateado (Ej: C, C++, Perl). \\
   \hline
-  \textbf{Probabilidad de \emph{exploit}} & Muy Alto. \\
+  \textbf{Probabilidad de \emph{exploit}} & Muy Alta. \\
   \hline
 \end{tabular}
 
@@ -28,30 +32,32 @@ int main(int argc, char **argv){
 	snprintf(buf,128,argv[1]);
 }
 \end{lstlisting}
-Este código permite a un intruso ver el contenido de el stack y escribir a el stack mediante un argumento de línea de
+Este código permite a un intruso ver el contenido del \textit{stack} y escribir al \textit{stack} mediante un argumento de línea de
 comandos que contiene una secuencia de formatos (Ej: \%d ,\%x ).
-Con un \%x uno puede leer del stack.
-Con un \%n un atacante puede escribir en el stack.
+Con un \%x se puede leer contenido del \textit{stack}, mientras que con un \%n, un atacante puede escribir en el \textit{stack}.
 
 \subsubsection{Métodos de detección}
 \begin{itemize}
- \item \textbf{Black Box}
+ \item \textbf{Black Box}\\
  	No es muy efectivo.
-  \item \textbf{Análisis automatizado}
-  	Hay herramientas de analisis estatico que permiten localizar este tipo de vulnerabilidad.
+  \item \textbf{Análisis automatizado}\\
+  	Hay herramientas de análisis estático que permiten localizar este tipo de vulnerabilidad.
 \end{itemize}
 
 \subsubsection{Nivel de vulnerabilidad}
 
-TODO
+El nivel de vulnerabilidad es \textit{primario}, lo que significa que la vulnerabilidad existe independientemente de la existencia de otras vulnerabilidades.
+
 
 \subsubsection{Consecuencias más frecuentes}
 
 Estos ataques pueden violar la confidencialidad, la integridad y la disponibilidad del sistema.
 
 \begin{itemize}
- \item Confidencialidad: Puede revelar información oculta.
- \item Integridad y disponibilidad: Puede ejecutar codigo arbitrario.
+ \item Confidencialidad\\
+    Se puede revelar información oculta.
+ \item Integridad y disponibilidad\\ 
+    Se puede ejecutar código arbitrario.
 \end{itemize}
 
 \subsubsection{Formas de mitigar el errror}
@@ -60,8 +66,27 @@ Estos ataques pueden violar la confidencialidad, la integridad y la disponibilid
 
 	\item Elegir un lenguage que no sea suceptible a este error.
 
-	\item Asegurarse que todos los "Strings" de formato sean estaticos
+	\item Asegurarse que todos los strings de formato sean estáticos.
 
-	\item Prestar atencion a los "warnings" del compilador y linkeditor
+	\item Prestar atención a los \textit{warnings} del compilador y linkeditor.
 
 \end{itemize}
+
+\subsubsection{Ejemplos observados}
+
+\begin{tabular}[\baselineskip]{|p{1.75cm}|p{3.5cm}|p{8cm}|}
+  \hline
+  \textbf{Referencia} & Programa/Aplicación & Consecuencia de la vulnerabilidad \\
+  \hline
+  \textbf{CVE-2002-1825} & WASD (7.1 a 8.0).0 & Ejecución de código arbitrario. \\
+  \hline
+  \textbf{CVE-2001-0717} & ToolTalk & Ejecución de código arbitrario. \\
+  \hline
+  \textbf{CVE-2002-0573} & RPC daemon, Solaris(2.5.1 a 8) & Ejecución de código arbitrario. \\
+  \hline
+  \textbf{CVE-2002-1788} & nn (6.6.0 a 6.6.3)  & Ejecución de código arbitrario.\\
+  \hline
+  \textbf{CVE-2006-2480} &  Dia 0.94  & Denial of service (DoS) y posiblemente Ejecución de código arbitrario.\\
+  \hline
+\end{tabular}
+

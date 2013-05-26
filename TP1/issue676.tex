@@ -1,8 +1,9 @@
 \subsection{Use of Potentially Dangerous Function}
 
 \subsubsection{Descripción del error}
-Un programa invoca una función potencialmente peligrosa, que podría introducir una vulnerabilidad si se usa incorrectamente, con algún conjunto de parámetros, pero que
-también puede ser invocada de forma segura.
+
+Esta vulnerabilidad consiste en la invocación de una función potencialmente peligrosa, que podría introducir una vulnerabilidad si se usa incorrectamente, 
+con algún conjunto de parámetros, pero que también puede ser invocada de forma segura.
 
 \subsubsection{Detalles técnicos del error}
 \begin{tabular}[\baselineskip]{|l|p{7cm}|}
@@ -30,18 +31,18 @@ también puede ser invocada de forma segura.
     }
 \end{lstlisting}
 
-El fragmento anterior intenta crear una copia local de un buffer para manipular sus datos, pero no se asegura que los datos apuntados por string entren en el
-buffer local y se copia ciegamente los datos, con la función potencialmente peligrosa \textit{strcpy()}. Esto puede tranquilamente resultar en una condición de \textbf{buffer overflow}
+El fragmento anterior intenta crear una copia local de un \textit{buffer} para manipular sus datos, pero no se asegura que los datos apuntados por el parámetro \textit{string} entren en el
+\textit{buffer} local y se copia ciegamente los datos, con la función potencialmente peligrosa \textit{strcpy()}. Esto puede tranquilamente resultar en una condición de \textbf{buffer overflow}
 si un atacante puede influenciar los contenidos del parámetro string.
-En este caso, se podría evitar muy fácilmente haciendo una verificación del tamaño del parámetro string, o utilizando la función seguro \textit{strncpy()}.
+En este caso, se podría evitar muy fácilmente haciendo una verificación del tamaño del parámetro string, o utilizando correctamente la función segura \textit{strncpy()}.
 
 \subsubsection{Métodos de detección}
-La detección de este tipo de funciones resulta muy díficil, principalmente porque depende de un profundo conocimiento del desarrollador que usa la función potencialmente peligrosa.
+La detección de este tipo de funciones resulta muy díficil, principalmente porque depende de un profundo conocimiento del programador que usa la función potencialmente peligrosa.
 
 \begin{itemize}
     \item Investigar y entender completamente el funcionamiento de una función, previo a su uso en un entorno de producción.
     \item Utilizar herramientas de análisis automático de código o compiladores que detecten el uso de este tipo de funciones.
-    \item Mantenerse actualizado sobre las noticias y los parches de seguridad acerca del lenguaje o framework que se utiliza a diario.
+    \item Mantenerse actualizado sobre las noticias y los parches de seguridad acerca del lenguaje o \textit{framework} que se utiliza a diario.
 \end{itemize}
 
 \subsubsection{Nivel de vulnerabilidad}
@@ -61,16 +62,16 @@ Por ejemplo,
 
 \subsubsection{Formas de mitigar el error}
 \begin{itemize}
-   \item Identificar una lista de funciones de APIs prohibidas, y prohibir su uso a los desarrolladores, proveyendo alternativas seguras.
+   \item Identificar una lista de funciones de APIs prohibidas, y prohibir su uso a los programadores, proveyendo alternativas seguras.
    \item Utilizar o configurar herramientas de análisis automático de código o compiladores para detectar el uso de estas funciones. (Ej: \textit{banned.h} de SDL de Microsoft).
 \end{itemize}
 
 \subsubsection{Extras}
 
-Esta vulnerabilidad es diferente de la CWE-242 (Use of Inherently Dangerous Function), ya que esta última abarca funciones tales problemas de seguridad que nunca podría ser
+Esta vulnerabilidad es diferente de la CWE-242 (Use of Inherently Dangerous Function), ya que esta última abarca funciones con tales problemas de seguridad que nunca podría ser
 considerada segura. Algunas funciones, si son usadas correctamente, no suponen directamente un riesgo de seguridad, pero puede introducir una debilidad si no son
 invocadas correctamente. Estas son las llamadas funciones potencialmente peligrosas. Un ejemplo muy conocido es la función \textit{strcpy()}. Cuando se le provee un buffer
-de destino más largo que la fuente, \textit{strcpy()} no causará un \textbf{buffer overflow}. Sin embargo, se utilizada de manera errónea tan frecuentemente, que algunos desarrolladores
+de destino más largo que la fuente, \textit{strcpy()} no causará un \textbf{buffer overflow}. Sin embargo, se utiliza de manera errónea tan frecuentemente, que algunos programadores
 prohiben por completo su uso.
 
 \subsubsection{Ejemplos observados}

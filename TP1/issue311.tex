@@ -4,7 +4,7 @@
 
 Esta vulnerabilidad sucede en aquellos casos en donde se envían datos sensibles sin haberlos encriptado a través de un canal no seguro.
 Al omitir las garantías de seguridad e integridad no solo se le permite a un posible atacante tomar información de la comunicación,
-sino también la inyección de nuevos datos, sin permitirle a ninguna de las dos partes información válida de la inválida.
+sino también la inyección de nuevos datos, sin permitirle a ninguna de las dos partes poder distinguir la información válida de la inválida.
 
 \subsubsection{Detalles técnicos del error}
 \begin{tabular}[\baselineskip]{|l|p{7cm}|}
@@ -13,9 +13,11 @@ sino también la inyección de nuevos datos, sin permitirle a ninguna de las dos
   \hline
   \textbf{Plataforma} & Independiente. \\
   \hline
+  \textbf{Tiempo de Introducción} & Arquitectura y Diseño. Operación. \\
+  \hline
   \textbf{Lenguaje} & Independiente. \\
   \hline
-  \textbf{Probabilidad de \emph{exploit}} & Alto a Muy Alto. \\
+  \textbf{Probabilidad de \emph{exploit}} & Alta a Muy Alta. \\
   \hline
 \end{tabular}
 
@@ -23,8 +25,8 @@ sino también la inyección de nuevos datos, sin permitirle a ninguna de las dos
 
 \noindent \textbf{Ejemplo en PHP}\\
 
-El siguiente código, escrito en PHP muestra este tipo de vulnerabilidad.
-En este caso se escribe la información de ingreso de un usuario en una \textit{cookie} para que el usuario no tenga que volver a intgresar.
+El siguiente código, escrito en PHP, muestra este tipo de vulnerabilidad.
+En este caso se escribe la información de inicio de sesión de un usuario en una \textit{cookie} para que el usuario no tenga que volver a iniciar sesión (\textit{login}).
 \begin{lstlisting}[frame=single]
 function persistLogin($username, $password){
     $data = array("username" => $username, "password"=> $password);
@@ -53,9 +55,9 @@ catch (IOException e) {
 }
 \end{lstlisting}
 
-Aunque se realiza con éxito una conexión, esta conexión no esta encriptada y es posible que toda la información enviada o recibida desde el servidor sea accedida por posibles atacantes.
+Aunque se realiza con éxito una conexión, esta conexión no está encriptada y es posible que toda la información enviada o recibida desde el servidor sea accedida por posibles atacantes.\\
 
-\noindent \textbf{Ejemplo en C}\\
+\textbf{Ejemplo en C}\\
 
 El siguiente ejemplo, en C, intenta establecer una conexión, leer una contraseña y luego guardarla en un \textit{buffer}.
 
@@ -78,29 +80,31 @@ Mientras resulte exitoso, este programa no encripta la información antes de esc
 
 \subsubsection{Métodos de detección}
 \begin{itemize}
- \item \textbf{Análisis manual}
-	Definir que información es sensible y cuál no requiere un alto conocimiento del sistema, con lo cuál un análisis manual suele ser requerido para una solución efectiva.
+ \item \textbf{Análisis manual}\\
+	Definir que información es sensible y cuál no, requiere un alto conocimiento del sistema, con lo cuál un análisis manual suele ser requerido para una solución efectiva.
 	Sin embargo, un esfuerzo manual no asegura una solución total respecto a los posibles límites de tiempo.
 	Los métodos de caja negra pueden producir artefactos que necesariamente requieran análisis manual.
 	Este método tiene una alta efectividad.
-  \item \textbf{Análisis automatizado}
-  Un análisis automatizado puede alertar la falta de encripción para ciertos datos.
-  Sin embargo un análisis humano sigue siendo requerido para distinguir información que intencionalmente no esta siendo encriptada.
+  \item \textbf{Análisis automatizado}\\
+  Un análisis automatizado puede alertar la falta de encriptación para ciertos datos.
+  Sin embargo un análisis humano sigue siendo requerido para distinguir información que intencionalmente no está siendo encriptada.
 \end{itemize}
 
 \subsubsection{Nivel de vulnerabilidad}
 
-TODO
+El nivel de vulnerabilidad es \textit{primario}, lo que significa que la vulnerabilidad existe independientemente de la existencia de otras vulnerabilidades.
 
 \subsubsection{Consecuencias más frecuentes}
 
-Los ataques basados en falta de encripción de datos sensibles pueden violar la confidencialidad y la integridad del sistema.
+Los ataques basados en falta de encriptación de datos sensibles pueden violar la confidencialidad y la integridad del sistema.
 
 \begin{itemize}
- \item Confidencialidad: La aplicación no utiliza un canal seguro, como SSL/TLS, para  el intercambio información sensible.
-	De este modo, un atacante puede acceder al tráfico de información tomando paquetes de la conexión y evaluarlos.
- \item Integridad: Al omitir la encripción de datos en cualquier aplicación puede ser considerado equivalente a enviarle la información a todos los miembros de las redes localales del
-	emisor y el destinatario. Más aun, esta omisión permite que se agregue o modifique información haciendo para los usuarios imposible distinguir datos válidos de datos inválidos.
+ \item Confidencialidad\\
+        La aplicación no utiliza un canal seguro, como SSL/TLS, para  el intercambio información sensible.
+	De este modo, un atacante puede acceder al tráfico de información tomando paquetes de la conexión y descubrir los datos.
+ \item Integridad\\
+        Omitir la encriptación de datos en cualquier aplicación puede ser considerado equivalente a enviarle la información a todos los miembros de las redes localales del
+	emisor y el destinatario. Más aún, esta omisión permite que se agregue o modifique información haciendo para los usuarios imposible distinguir datos válidos de datos inválidos.
 \end{itemize}
 
 \subsubsection{Formas de mitigar el error}
@@ -108,3 +112,8 @@ Los ataques basados en falta de encripción de datos sensibles pueden violar la 
 En una primera instancia es necesario hacer un análisis profundo de los requerimientos de confidencialidad e integridad del sistema.
 Una vez pasada esta etapa basta con encriptar correctamente los datos considerados sensibles.
 Por último, el uso de un canal seguro como SSL es una buena práctica que ayuda a eliminar este problema.
+
+
+\subsubsection{Ejemplos observados}
+
+TODO

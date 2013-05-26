@@ -41,9 +41,9 @@
         \begin{center}
                 \includegraphics{./images/itba_logo.png}
                 \vfill
-                \Huge{Criptografia y Seguridad}\\
+                \Huge{Criptografía y Seguridad}\\
                 \vspace{1cm}
-                \Huge{25 Errores de Software Mas Frecuentes}\\
+                \Huge{25 Errores de Software Más Frecuentes}\\
                 \vspace{1cm}
                 \Huge{Trabajo Pr\'actico Especial 1}\\
         \end{center}
@@ -52,8 +52,8 @@
         \begin{tabular}{lcr}
                 Civile, Juan Pablo && 50453\\
                 Crespo, Alvaro && 50758 \\
-                Susnisky, Dario && \\
-                Wassington, Axel && \\
+                Susnisky, Dario && 50592\\
+                Wassington, Axel && 50124\\
         \end{tabular}
 }
         \vspace{2cm}
@@ -70,7 +70,7 @@ La lista de los 25 errores de software más frecuentes es un proyecto impulsado 
 y Europa. Se deriva de la experiencia del desarrollo del Top20\footnote{\url{http://www.sans.org/top20/}} de ataques informáticos
 implementado por SANS, y la enumeración de debilidades comunes\footnote{\url{http://cwe.mitre.org/}} de software 
 desarrollado por MITRE. Este \emph{ranking} se actualiza todos los años, y para la selección de los errores en cada año,
-se toman en cuenta evaluaciones realizadas por distintas empresas del rubro de seguridad informática, las cuales evalúan a
+se toman en cuenta evaluaciones realizadas por distintas empresas del rubro de seguridad informática, las cuales evalúan
 los errores según \textbf{prevalecencia}, \textbf{importancia} y \textbf{posibilidad de \emph{exploit}}. Luego, todas estas
 evaluaciones son las entradas para el sistema de puntaje diseñado por MITRE (\emph{Common Weakness Scoring System}), de donde se obtienen los
 errores ordenados.\\
@@ -137,5 +137,28 @@ Otras vulnerabilidades que no fueron selecccionados para el \emph{Top25} son:
 \include{issue22}
 
 \include{issue676}
+
+\clearpage
+\section{Conclusiones}
+
+Luego de realizar la investigación de seis de los errores más frecuentes en el software se sacaron las siguientes
+conclusiones.
+
+\begin{itemize}
+ \item Muchos de los errores pueden evitarse, si se los tiene en cuenta desde el momento en que se comienza
+ a diseñar el sistema.
+ \item Varios de los errores son fácilmente solucionables y no requieren de un desarrollo prolongado que requiera
+ grandes costos.
+ \item Deben analizarse qué errores considerar para el sistema que se está desarrollando, según su probabilidad
+ de ocurrencia, y daños que puedan causar. Es muy fácil generar paranoia, y desarrollar técnicas para evitar
+ ataques que nunca sucederían por el contexto en donde está el software, o puedan resolverse mediante la utilización
+ de herramientas ya desarrolladas, y no tengan que ser contempladas en el desarrollo del sistema.
+ \item Identificar aquellos ataques a los que se sabe que el sistema queda expuesto, y definir un plan de contingencia.
+ Muchas veces, es menos costoso desarrollar una técnina para recuperarse de un ataque, que desarrollar una técnica para evitarlo.
+ \item Muchos de los errores ya están contemplados en frameworks, por lo tanto, la elección de un framework adecuado
+ es muy importante, para no reimpementar funcionalidades. No dejarse engañar por la belleza de las páginas de frameworks
+ poco conocidos, o con pocos años de desarrollo.
+\end{itemize}
+
 
 \end{document}
