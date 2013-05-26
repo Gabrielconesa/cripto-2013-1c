@@ -27,7 +27,7 @@
 \usepackage{url}
 \usepackage{listings}
 \lstset{breaklines=true}
-\lstset{numbers=left, numberstyle=\scriptsize\ttfamily, numbersep=10pt, captionpos=b} 
+\lstset{numbers=left, numberstyle=\scriptsize\ttfamily, numbersep=10pt, captionpos=b}
 \lstset{basicstyle=\small\ttfamily}
 \lstset{framesep=4pt}
 
@@ -66,25 +66,25 @@
 \setcounter{page}{1}
 
 \section{Introducción}
-La lista de los 25 errores de software más frecuentes es un proyecto impulsado por \textbf{SANS Institute}, \textbf{MITRE} y expertos en seguridad informática de EEUU 
+La lista de los 25 errores de software más frecuentes es un proyecto impulsado por \textbf{SANS Institute}, \textbf{MITRE} y expertos en seguridad informática de EEUU
 y Europa. Se deriva de la experiencia del desarrollo del Top20\footnote{\url{http://www.sans.org/top20/}} de ataques informáticos
-implementado por SANS, y la enumeración de debilidades comunes\footnote{\url{http://cwe.mitre.org/}} de software 
+implementado por SANS, y la enumeración de debilidades comunes\footnote{\url{http://cwe.mitre.org/}} de software
 desarrollado por MITRE. Este \emph{ranking} se actualiza todos los años, y para la selección de los errores en cada año,
 se toman en cuenta evaluaciones realizadas por distintas empresas del rubro de seguridad informática, las cuales evalúan
 los errores según \textbf{prevalecencia}, \textbf{importancia} y \textbf{posibilidad de \emph{exploit}}. Luego, todas estas
 evaluaciones son las entradas para el sistema de puntaje diseñado por MITRE (\emph{Common Weakness Scoring System}), de donde se obtienen los
 errores ordenados.\\
- 
+
 Los 25 errores están categorizados en los siguientes 3 grupos
 \begin{itemize}
     \item Interacción insegura entre componentes.
     \item Gestión riesgosa de recursos.
     \item Defensas porosas.
 \end{itemize}
- 
+
 En este año, fueron 20 las organizaciones evaluadoras, y el resultado de la evaluación arrojó el \emph{ranking} de errores que se muestra
 en la siguiente sección.
- 
+
 \subsection{Los 25 errores más frecuentes del 2011}
 Se presentan resaltados los errores que se analizan en este documento.
 \begin{enumerate}
@@ -119,10 +119,23 @@ Se presentan resaltados los errores que se analizan en este documento.
 Otras vulnerabilidades que no fueron selecccionados para el \emph{Top25} son:
 
 \begin{enumerate}
- \setcounter{enumi}{26}
- \item \textbf{Improper Validation of Array Index}
- \setcounter{enumi}{38}
- \item \textbf{Information Exposure Through an Error Message}
+ \setcounter{enumi}{25}
+ \item Allocation of Resources Without Limits or Throttling
+ \item Improper Validation of Array Index
+ \item Improper Check for Unusual or Exceptional Conditions
+ \item Buffer Access with Incorrect Length Value
+ \item Inappropriate Encoding for Output Context
+ \item Use of Insufficiently Random Values
+ \item Untrusted Pointer Dereference
+ \item Concurrent Execution using Shared Resource with Improper Synchronization ('Race Condition')
+ \item Improper Cross-boundary Removal of Sensitive Data
+ \item Incorrect Conversion between Numeric Types
+ \item NULL Pointer Dereference
+ \item Improper Enforcement of Behavioral Workflow
+ \item Missing Release of Resource after Effective Lifetime
+ \item Information Exposure Through an Error Message
+ \item Expired Pointer Dereference
+ \item Missing Initialization
 \end{enumerate}
 
 \clearpage
