@@ -2,7 +2,7 @@
 
 \subsubsection{Descripción del error}
 
-Esta vulnerabilidad ocurre cuando un programa copia un buffer de entrada a otro de salida, sin verificar que el tamaño del buffer de entrada sea menor que el tamaño del buffer de salida. 
+Esta vulnerabilidad ocurre cuando un programa copia un buffer de entrada a otro de salida, sin verificar que el tamaño del buffer de entrada sea menor que el tamaño del buffer de salida.
 Esto es lo que se conoce como \textbf{buffer overflow}.\\
 
 Una condición de buffer overflow existe cuando un programa intenta poner más datos en un buffer de los que éste puede contener, o cuando intenta poner datos en un área de memoria
@@ -172,7 +172,7 @@ Existen múltiples maneras de prevenir este error. A continuación se presenta u
 	Esto debe ser tenido en cuenta en la fase de arquitectura y diseño.
     \item Restricciones en la compilación.
 	Una alternativa es correr o compilar el software usando prestaciones o servicios que tengan un mecanismo automático para prevenir este problema.
-	Esta herramienta, usada en el momento de compilar no es una solución completa ya que no detecta todos los tipos de overflow, dejando posible las posibilidades de un ataque.
+	Esta herramienta, usada en el momento de compilar no es una solución completa ya que no detecta todos los tipos de overflow, dejando posibilidades de un ataque.
     \item Buenas prácticas y costumbres.
 	Como siempre a la hora de la implementación resulta útil seguir una guía de buenas prácticas y costumbres.
 	De entre ellas se pueden destacar:
@@ -195,7 +195,7 @@ Existen múltiples maneras de prevenir este error. A continuación se presenta u
     \item Chequeos desde el lado del servidor. Por cada chequeo de seguridad que se haga desde el lado del cliente, es una buena práctica volver a chequearlo desde el lado del servidor para
 	evitar problemas.
     \item Reforzar el entorno. Usar alguna característica como \textit{Address Space Layout Randomization (ASLR)} ayuda a prevenir el problema.
-	Otra forma de reforzar el entorno implica usar una computadora y un sistema operativo que ofrescan capacidades como \textit{Data Execution Protection (NX)}.
+	Otra forma de reforzar el entorno implica usar una computadora y un sistema operativo que ofrezcan capacidades como \textit{Data Execution Protection (NX)}.
 	Estas herramientas tampoco son una solución completa ya que no solucionan todos los posibles ataques.
     \item Usar funciones que incluyan parámetros de longitud. Una buena práctica es sustituir aquellas funciones sin límites de longitud, por otras que sí lo reciban por parámetro.
 
@@ -215,8 +215,8 @@ Existen múltiples maneras de prevenir este error. A continuación se presenta u
   \hline
   \textbf{CVE-2002- 1337} & Sendmail(5.79 a 8.12.7) & Buffer Overflow por mal parseo de comentarios. \\
   \hline
-  \textbf{CVE-2003- 0595} & WiTango Application Server and Tango 2000 & Buffer Overflow, por reemplazo de un valor de una cookie por una string extramadamente larga.\\
+  \textbf{CVE-2003- 0595} & WiTango Application Server and Tango 2000 & Buffer Overflow, por reemplazo de un valor de una cookie por un string extramadamente largo.\\
   \hline
-  \textbf{CVE-2001- 0191} & gnuserv (XEmacs) & Buffer Overflow, por reemplazo de un valor de una cookie por una string extramadamente larga. \\
+  \textbf{CVE-2001- 0191} & gnuserv (XEmacs) & Buffer Overflow, por reemplazo de un valor de una cookie por un string extramadamente largo. \\
   \hline
 \end{tabular}
