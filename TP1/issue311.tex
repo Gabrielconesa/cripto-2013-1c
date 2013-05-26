@@ -113,7 +113,18 @@ En una primera instancia es necesario hacer un análisis profundo de los requeri
 Una vez pasada esta etapa basta con encriptar correctamente los datos considerados sensibles.
 Por último, el uso de un canal seguro como SSL es una buena práctica que ayuda a eliminar este problema.
 
-
 \subsubsection{Ejemplos observados}
 
-TODO
+\begin{tabular}[\baselineskip]{|p{1.75cm}|p{3.5cm}|p{8cm}|}
+  \hline
+  \textbf{Referencia} & Programa/Aplicación & Resumen de la vulnerabilidad \\
+  \hline
+  \textbf{CVE-2009-2272} & Huawei D100 & Usuario y contraseña guardado como texto plano en una \textit{cookie}. \\
+  \hline
+  \textbf{CVE-2009-1466} & Application Access Server 2.0.48 & Contraseña guardada como texto plano en un archivo con permisos inseguros.\\
+  \hline
+  \textbf{CVE-2009-0946} & UserView\_list.php en PHPRunner 4.2 & Contraseña guardada como texto plano en la base de datos. \\
+  \hline
+  \textbf{CVE-2007-5626} & make\_catalog\_backup en Bacula 2.2.5 & Rutina de \textit{backup} envía la contraseña en texto plano por mail. \\
+  \hline
+\end{tabular}
