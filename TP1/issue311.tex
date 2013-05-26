@@ -1,7 +1,9 @@
 \subsection{Missing Encryption of Sensitive Data}
-  
+
+\subsubsection{Descripción del error}
+
 Esta vulnerabilidad sucede en aquellos casos en donde se envían datos sensibles sin haberlos encriptado a través de un canal no seguro.
-Al omitir las garantías de seguridad e integridad no solo se le permite a un posible atacante tomar información de la comunicación, 
+Al omitir las garantías de seguridad e integridad no solo se le permite a un posible atacante tomar información de la comunicación,
 sino también la inyección de nuevos datos, sin permitirle a ninguna de las dos partes información válida de la inválida.
 
 \subsubsection{Detalles técnicos del error}
@@ -17,18 +19,7 @@ sino también la inyección de nuevos datos, sin permitirle a ninguna de las dos
   \hline
 \end{tabular}
 
-\subsubsection{Consecuencias}
-
-Los ataques basados en falta de encripción de datos sensibles pueden violar la confidencialidad y la integridad del sistema.
-
-\begin{itemize}
- \item Confidencialidad: La aplicación no utiliza un canal seguro, como SSL/TLS, para  el intercambio información sensible.
-	De este modo, un atacante puede acceder al tráfico de información tomando paquetes de la conexión y evaluarlos.
- \item Integridad: Al omitir la encripción de datos en cualquier aplicación puede ser considerado equivalente a enviarle la información a todos los miembros de las redes localales del
-	emisor y el destinatario. Más aun, esta omisión permite que se agregue o modifique información haciendo para los usuarios imposible distinguir datos válidos de datos inválidos.
-\end{itemize}
-
-\subsubsection{Ejemplos}
+\subsubsection{Ejemplos en código}
 
 \noindent \textbf{Ejemplo en PHP}\\
 
@@ -85,11 +76,11 @@ while ((n=read(sock,buffer,BUFSIZE-1))!=-1) {
 
 Mientras resulte exitoso, este programa no encripta la información antes de escribirla en el \textit{buffer} haciendo posible la exposición de esta información.
 
-\subsubsection{Detección}
+\subsubsection{Métodos de detección}
 \begin{itemize}
  \item \textbf{Análisis manual}
-	Definir que información es sensible y cuál no requiere un alto conocimiento del sistema, con lo cuál un análisis manual suele ser requerido para una solución efectiva. 
-	Sin embargo, un esfuerzo manual no asegura una solución total respecto a los posibles límites de tiempo. 
+	Definir que información es sensible y cuál no requiere un alto conocimiento del sistema, con lo cuál un análisis manual suele ser requerido para una solución efectiva.
+	Sin embargo, un esfuerzo manual no asegura una solución total respecto a los posibles límites de tiempo.
 	Los métodos de caja negra pueden producir artefactos que necesariamente requieran análisis manual.
 	Este método tiene una alta efectividad.
   \item \textbf{Análisis automatizado}
@@ -97,8 +88,23 @@ Mientras resulte exitoso, este programa no encripta la información antes de esc
   Sin embargo un análisis humano sigue siendo requerido para distinguir información que intencionalmente no esta siendo encriptada.
 \end{itemize}
 
-\subsubsection{Protección}
+\subsubsection{Nivel de vulnerabilidad}
 
-En una primera instancia es necesario hacer un análisis profundo de los requerimientos de confidencialidad e integridad del sistema. 
+TODO
+
+\subsubsection{Consecuencias más frecuentes}
+
+Los ataques basados en falta de encripción de datos sensibles pueden violar la confidencialidad y la integridad del sistema.
+
+\begin{itemize}
+ \item Confidencialidad: La aplicación no utiliza un canal seguro, como SSL/TLS, para  el intercambio información sensible.
+	De este modo, un atacante puede acceder al tráfico de información tomando paquetes de la conexión y evaluarlos.
+ \item Integridad: Al omitir la encripción de datos en cualquier aplicación puede ser considerado equivalente a enviarle la información a todos los miembros de las redes localales del
+	emisor y el destinatario. Más aun, esta omisión permite que se agregue o modifique información haciendo para los usuarios imposible distinguir datos válidos de datos inválidos.
+\end{itemize}
+
+\subsubsection{Formas de mitigar el error}
+
+En una primera instancia es necesario hacer un análisis profundo de los requerimientos de confidencialidad e integridad del sistema.
 Una vez pasada esta etapa basta con encriptar correctamente los datos considerados sensibles.
 Por último, el uso de un canal seguro como SSL es una buena práctica que ayuda a eliminar este problema.

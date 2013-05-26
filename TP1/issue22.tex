@@ -1,5 +1,7 @@
 \subsection{Path Traversal}
 
+\subsubsection{Descripción del error}
+
 Este error se da cuando un programa hace uso de entrada externa para acceder a recursos del file system.
 Si no se valida y limita correctamente a que recursos se puede acceder, un atacante puede obtener informacion privilegiada o vulnerar el programa y/o sistema en el que corre.
 
@@ -7,21 +9,11 @@ Todo sistema que haga manejo de recursos del file system se encuentra potencialm
 No depende del sistema operativo ni del lenguaje utilizado.
 Algunos lenguajes pueden ofrecer mecanismos para mitigar este ataque, pero deben ser correctamente configurados para esto.
 
-\subsubsection{Consecuencias}
+\subsubsection{Detalles técnicos del error}
 
-Un programa afectado por esta vulnerabilidad podria ser manipulado para lograr los siguientes efectos:
+TODO
 
-\begin{itemize}
-
-    \item Modificar archivos criticos del sistema o programa para alterar el comportamiento del mismo o otros programas en el sistema
-
-    \item Otorgarle al atacante acceso a partes seguras del sistema alterando archivos de seguridad
-
-    \item El atacante podria obtener acceso de lectura a archivos con informacion sensible, potencialmente otorgandole informacion de otros usuarios del sistema o informacion de seguridad del mismo
-
-\end{itemize}
-
-\subsubsection{Ejemplo}
+\subsubsection{Ejemplos de código}
 
 \begin{figure}[H]
 
@@ -38,14 +30,32 @@ include($_GET['file']);
 
 Si este script se encuentra en un sistema \textit{Linux} podemos obtener la lista de usuarios del sistema y sus contraseñas encriptadas haciendo un request a \texttt{/vulnerable.php?file=/etc/passwd}.
 
-\subsubsection{Deteccion}
+\subsubsection{Métodos de detección}
 
 En lenguajes donde este disponible, herramientas de analisis estatico pueden facilmente detectar potenciales casos de \textit{Path Traversal}. Es posible que se encuentre con falsos positivos, donde la funcionalidad sea deseada para administradores o usuarios con suficientes privilegios.
 En caso de no disponer de herramientas de analisis estatico, el uso de \textit{White Box testing} puede detectar ocurrencias de esta clase de vulnerabilidad.
 
-\subsubsection{Proteccion}
+\subsubsection{Nivel de vulnerabilidad}
 
-Existen numerosas maneras de proteger un programa de este tipo de error. 
+TODO
+
+\subsubsection{Consecuencias más frecuentes}
+
+Un programa afectado por esta vulnerabilidad podria ser manipulado para lograr los siguientes efectos:
+
+\begin{itemize}
+
+    \item Modificar archivos criticos del sistema o programa para alterar el comportamiento del mismo o otros programas en el sistema
+
+    \item Otorgarle al atacante acceso a partes seguras del sistema alterando archivos de seguridad
+
+    \item El atacante podria obtener acceso de lectura a archivos con informacion sensible, potencialmente otorgandole informacion de otros usuarios del sistema o informacion de seguridad del mismo
+
+\end{itemize}
+
+\subsubsection{Formas de mitigar el error}
+
+Existen numerosas maneras de proteger un programa de este tipo de error.
 Como en toda vulnerabilidad de entrada externa maliciosa, se debe tratar como potencialmente hostil toda entrada, incluso si viene de una fuente confiado.
 
 Se puede utilizar tecnicas de \textit{White listing} y \textit{Black listing}.
