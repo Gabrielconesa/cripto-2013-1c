@@ -17,10 +17,10 @@ también puede ser invocada de forma segura.
   \hline
   \textbf{Probabilidad de \emph{exploit}} & Alta \\
   \hline
-\end{tabular} 
+\end{tabular}
 
 \subsubsection{Ejemplos de código}
-A continuación se muestra un pequeño y simple ejemplo con código en Lenguaje C.
+\noindent \textbf{Ejemplo en C}\\
 
 \begin{lstlisting}[frame=single]
     void manipulate_string(char * string){
@@ -32,7 +32,7 @@ A continuación se muestra un pequeño y simple ejemplo con código en Lenguaje 
 
 El fragmento anterior intenta crear una copia local de un buffer para manipular sus datos, pero no se asegura que los datos apuntados por string entren en el
 buffer local y se copia ciegamente los datos, con la función potencialmente peligrosa \textit{strcpy()}. Esto puede tranquilamente resultar en una condición de \textbf{buffer overflow}
-si un atacante puede influenciar los contenidos del parámetro string. 
+si un atacante puede influenciar los contenidos del parámetro string.
 En este caso, se podría evitar muy fácilmente haciendo una verificación del tamaño del parámetro string, o utilizando la función seguro \textit{strncpy()}.
 
 \subsubsection{Métodos de detección}
@@ -51,14 +51,14 @@ El nivel de vulnerabilidad es \textit{primario}, lo que significa que esta vulne
 
 \subsubsection{Consecuencias más frecuentes}
 
-Si la función se utiliza incorrectamente, es decir se le pasan ciertos parámetros que generan el comportamiento peligroso, entonces se podrían generar problemas de seguridad. 
+Si la función se utiliza incorrectamente, es decir se le pasan ciertos parámetros que generan el comportamiento peligroso, entonces se podrían generar problemas de seguridad.
 Por ejemplo,
 
 \begin{itemize}
     \item Ejecución de código arbitrario por parte de un atacante.
     \item Que usuarios locales comunes, o atacantes remotos ganen privilegios que no deberían tener.
 \end{itemize}
-  
+
 \subsubsection{Formas de mitigar el error}
 \begin{itemize}
    \item Identificar una lista de funciones de APIs prohibidas, y prohibir su uso a los desarrolladores, proveyendo alternativas seguras.

@@ -15,20 +15,17 @@ TODO
 
 \subsubsection{Ejemplos de código}
 
-\begin{figure}[H]
+\noindent \textbf{Ejemplo en PHP}\\
 
-% TODO: Replace this with a syntax highlighting code enviorment
-    \begin{lstlisting}
+\begin{lstlisting}[frame=single]
 <?php
 include($_GET['file']);
-    \end{lstlisting}
-
-    \caption{Codigo PHP vulnerable a revelar informacion sensible}
-    \label{code:php-traversal}
-
-\end{figure}
+?>
+\end{lstlisting}
 
 Si este script se encuentra en un sistema \textit{Linux} podemos obtener la lista de usuarios del sistema y sus contraseñas encriptadas haciendo un request a \texttt{/vulnerable.php?file=/etc/passwd}.
+
+(TODO: Ver que la linea se nos va con el ancho)
 
 \subsubsection{Métodos de detección}
 

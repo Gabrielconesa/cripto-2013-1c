@@ -2,12 +2,12 @@
 
 \subsubsection{Descripción del error}
 
-El programa copia un buffer de entrada a otro de salida, sin verificar que el tamaño del buffer de entrada sea menor que el tamaño del buffer de salida. Esto provoca 
+El programa copia un buffer de entrada a otro de salida, sin verificar que el tamaño del buffer de entrada sea menor que el tamaño del buffer de salida. Esto provoca
 lo que se conoce como \textbf{buffer overflow}.\\
 
 Una condición de buffer overflow existe cuando un programa intenta poner más datos en un buffer de los que éste puede contener, o cuando intenta poner datos en un área de memoria
-fuera de los límites del buffer. El más simple de los errores, y la causa más común de los buffer overflows, es el típico caso en el que un programa copia un buffer sin 
-restringir cuanto se está copiando efectivamente. Existen otros casos, pero la existencia de un overflow clásico sugiere fuertemente que el programador no está considerando 
+fuera de los límites del buffer. El más simple de los errores, y la causa más común de los buffer overflows, es el típico caso en el que un programa copia un buffer sin
+restringir cuanto se está copiando efectivamente. Existen otros casos, pero la existencia de un overflow clásico sugiere fuertemente que el programador no está considerando
 las más básicas reglas de seguridad. \\
 
 Previamente se conocía esta vulnerabilidad con el nombre de \textbf{Unbounded Transfer ('Classic Buffer Overflow')}. El 14 de Octubre de 2008 se le cambió el nombre por el actual.
@@ -19,8 +19,8 @@ Términos alternativos
     \item \textbf{Unbounded Transfer}
 \end{itemize}
 
-Muchos casos que son llamados ``buffer overflows'' son susbstancialmente diferentes al overflow ``clásico'', incluyendo diferentes tipos de bugs que se basan en técnicas 
-de overflow, como errores de signos de enteros, integer overflows y bugs de formatos de strings. Esta terminología imprecisa puede hacer que sea difícil determinar a cual 
+Muchos casos que son llamados ``buffer overflows'' son susbstancialmente diferentes al overflow ``clásico'', incluyendo diferentes tipos de bugs que se basan en técnicas
+de overflow, como errores de signos de enteros, integer overflows y bugs de formatos de strings. Esta terminología imprecisa puede hacer que sea difícil determinar a cual
 variante se este refiriendo.
 
 \subsubsection{Detalles técnicos del error}
@@ -36,9 +36,11 @@ variante se este refiriendo.
   \hline
   \textbf{Probabilidad de \emph{exploit}} & Alta a Muy Alta \\
   \hline
-\end{tabular} 
+\end{tabular}
 
 \subsubsection{Ejemplos de código}
+
+\noindent \textbf{Ejemplo en C}\\
 
 El siguiente código, escrito en C, le pide al usuario que ingrese su apellido y luego intenta guardar el valor ingresado en el array \texttt{last\_name}.
 
@@ -51,6 +53,8 @@ El siguiente código, escrito en C, le pide al usuario que ingrese su apellido y
 El problema con este código es que no restringe o limita el tamaño del nombre ingresado por el usuario. Si el usuario ingresa "Very\_very\_long\_last\_name", que tiene 24 carácteres de largo,
 entonces ocurrirá un buffer overflow, ya que el array solo puede contener 20 carácteres en total. \\
 
+\noindent \textbf{Ejemplo en C}\\
+
 El siguiente ejemplo, también un fragmento de código en C, intenta crear un copia local de un buffer para hacer alguna manipulación de los datos.
 
 \begin{lstlisting}[frame=single]
@@ -61,9 +65,11 @@ El siguiente ejemplo, también un fragmento de código en C, intenta crear un co
     }
 \end{lstlisting}
 
-Sin embargo, el programador no se asegura que el tamaño de los datos apuntados por el string entren en el buffer local y copia ciegamente los datos, con la 
+Sin embargo, el programador no se asegura que el tamaño de los datos apuntados por el string entren en el buffer local y copia ciegamente los datos, con la
 función potencialmente peligrosa \textit{strcpy()}. Esto puede tranquilamente resultar en una condición de \textbf{buffer overflow}
 si un atacante puede influenciar los contenidos del parámetro string. \\
+
+\noindent \textbf{Ejemplo en C}\\
 
 El fragmento siguiente llama a la función \textit{gets()} en C, que es inherentemente insegura.
 
@@ -75,6 +81,8 @@ El fragmento siguiente llama a la función \textit{gets()} en C, que es inherent
 
 Sin embargo, el programador está usando la función \textit{gets()} que es inherentemente insegura porque intenta copiar ciegamente desde \texttt{STDIN} al buffer sin restringir
 cuanto se copia. Esto permite al usuario proveer una string que sea más larga que el tamaño del buffer, resultando en una condición de overflow.\\
+
+\noindent \textbf{Ejemplo en C++}\\
 
 En el siguiente ejemplo, escrito en C++, un servidor acepta conexiones de un cliente y proceso su pedido. Después de aceptar la conexión, el programa obtendrá la información del cliente
 usando el método \textit{gethostbyaddr()}, copiará el hostname del cliente conectaod a una variable local y también lo imprimirá en un archivo de log.
@@ -118,11 +126,11 @@ el hostname usando el método \textit{strcpt()}.
         Esta vulnerabilidad puede detectarse muy a menudo utilizando herramientas de análisis estático automatizado. Muchas herramientas modernas usan análisis de flujo de datos
         or técnicas basadas en constraints para minimizar el número de falsos positivos. En general, no toma en cuenta consideraciones ambientales al reportar overflows. Esto puede
         hacer que los usuarios encuentren difícil determinar cual warnings investigar primero. Por ejemplo, una herramienta podría reportar buffer overflows originados de argumentos
-        de línea de comandos en un programa que no ,se supone que corra con \textit{setuid} o otros privilegios especiales. 
+        de línea de comandos en un programa que no ,se supone que corra con \textit{setuid} o otros privilegios especiales.
         Tiene una alta efectividad. Las técnicas de detección para errores relacionados con buffer overflows están más maduras que para otras vulnerabilidades.
     \item \textbf{Análisis Dinámico Automatizado}\\
-        Esta vulnerabilidad puede ser detectada usando herramientas y técnicas dinámicas que interactúan con el software usando largos tests con muchas y variadas entradas, como 
-        fuzz testing (\textit{fuzzing}), \textit{robustness testing}, y \textit{fault injection}. Se supone que el software puede ralentizarse, pero no debería volverse inestable, 
+        Esta vulnerabilidad puede ser detectada usando herramientas y técnicas dinámicas que interactúan con el software usando largos tests con muchas y variadas entradas, como
+        fuzz testing (\textit{fuzzing}), \textit{robustness testing}, y \textit{fault injection}. Se supone que el software puede ralentizarse, pero no debería volverse inestable,
         crashear, o generar resultados incorrectos.
     \item \textbf{Análisis Manual}\\
         El análisis manual puede ser útil para encontrar esta vulnerabilidad, pero puede no lograr la cobertura de código deseada dentro los límites de tiempo deseados. Esto se torna
@@ -131,7 +139,7 @@ el hostname usando el método \textit{strcpt()}.
 
 \subsubsection{Nivel de vulnerabilidad}
 
-Los niveles de vulnerabilidad pueden ser 
+Los niveles de vulnerabilidad pueden ser
 
 \begin{itemize}
     \item \textit{resultante}, lo que significa que la vulnerabilidad está típicamente relacionada con la presencia de alguna otra vulnerabilidad.
@@ -141,8 +149,8 @@ Los niveles de vulnerabilidad pueden ser
 \subsubsection{Consecuencias más frecuentes}
 
 \begin{itemize}
-    \item Los buffer overflows pueden ser usados para ejecutar código arbitrario, lo que generalmente está por fuera de las políticas de seguridad de cualquier programa, 
-     y lo cual puede resultar catastrófico. El impacto técnico es entonces, la ejecución no autorizada de código o comandos. Esto representa una falla de integridad, 
+    \item Los buffer overflows pueden ser usados para ejecutar código arbitrario, lo que generalmente está por fuera de las políticas de seguridad de cualquier programa,
+     y lo cual puede resultar catastrófico. El impacto técnico es entonces, la ejecución no autorizada de código o comandos. Esto representa una falla de integridad,
     confidencialidad y disponibilidad.
     \item Los buffer overflows generalmente llevan a crashes. Otros ataques que llevan a la falta de disponibilidad son posibles incluyendo poner al programa en un loop infinito.
     El impacto técnico es variado: puede ser un Denial Of Service (DoS), crash, exit, restart, consumo de recursos (CPU). Esto representa una falla de disponibilidad.
@@ -156,7 +164,7 @@ Existen multiples maneras de prevenir este error. A continuación se presenta un
     \item Elegir cautelosamente el lenguaje de programación. Esta estrategia debe ser tomada en la fase de análisis de requerimientos del sistema.
 	Basta con elegir un lenguaje de programación que no permita este error o que facilite maneras de evitarlo.
 	Por ejemplo, varios lenguajes que tienen un propio manejo de la memoria, como Java o Perl, no causan overflows.
-    \item Usar librerias o frameworks. 
+    \item Usar librerias o frameworks.
 	El uso de librerias o frameworks que no permitan o ayuden a prevenir este error también es de buena práctica.
 	Un buen ejemplo es la \textit{Safe C String Library (SafeStr)}.
 	Esto debe ser tenido en cuenta en la fase de arquitectura y diseño.
@@ -166,27 +174,27 @@ Existen multiples maneras de prevenir este error. A continuación se presenta un
     \item Buenas prácticas y costumbres.
 	Como siempre a la hora de la implementación resulta util seguir una guía de buenas prácticas y costumbres.
 	De entre ellas se pueden destacar:
-	
+
 	* Re chequear si nuestro buffer tiene el tamaño que deseamos.
-	
+
 	* Al copiar buffers tener en cuenta que el buffer al que se copia se por lo menos tan grande como el original.
-	
+
 	* Al estar en un ciclo, chequear que los límites del buffer esten siendo respetados, sin escribir en areas no permitidas.
-	
+
 	* Si es necesario, truncar \textit{strings} a longitudes razonables.
     \item Validar las entradas.
 	Considerar que toda entrada ajena es maliciosa es una solución al problema, haciendo que solamente sean aceptables las entradas que estrictamente cumplan ciertas especificaciones.
 	Es necesario considerar en este caso todas las propiedades potencialmente relevantes, incluyendo tamaño y tipo de la entrada entre otras.
-	Si bien las \textit{listas negras} pueden ser utiles para detectar potenciales ataques, no son del todo confiables permitiendo en ciertos casos que alguna entrada mal formada o maliciosa 
+	Si bien las \textit{listas negras} pueden ser utiles para detectar potenciales ataques, no son del todo confiables permitiendo en ciertos casos que alguna entrada mal formada o maliciosa
 	pase los requerimientos.
-    \item Chequeos desde el lado del servidor. Por cada chequeo de seguridad que se haga desde el lado del cliente, es de buena práctica volver a chequearlo desde el lado del servidor para 
+    \item Chequeos desde el lado del servidor. Por cada chequeo de seguridad que se haga desde el lado del cliente, es de buena práctica volver a chequearlo desde el lado del servidor para
 	evitar problemas.
-    \item Reforzar el entorno. Usar alguna característica como \textit{Address Space Layout Randomization (ASLR)} ayuda a prevenir el problema. 
+    \item Reforzar el entorno. Usar alguna característica como \textit{Address Space Layout Randomization (ASLR)} ayuda a prevenir el problema.
 	Otra forma de reforzar el entorno implica usar una computadora y un sistema operativo que ofrescan capacidades como \textit{Data Execution Protection (NX)}.
 	Estas herramienta tampoco son una solución completa ya que no soluciona todos los posibles ataques.
     \item Usar funciones que incluyan parametros de longitud. Una buena práctica es sustituir aquellas funciones sin límites de longitud, por otras que sí lo reciban por parametro.
 	Esta estrategía, usada en la implementación es suceptible a errores de cálculo.
-    \item Reducir los permisos o crear entornos reducidos. Al operar con los permisos correctos se puede lograr minimizar un ataque efectivo. Un efecto similar se obtiene al crear un 
+    \item Reducir los permisos o crear entornos reducidos. Al operar con los permisos correctos se puede lograr minimizar un ataque efectivo. Un efecto similar se obtiene al crear un
 	entorno de operación con límites estrictos.
 \end{itemize}
 
