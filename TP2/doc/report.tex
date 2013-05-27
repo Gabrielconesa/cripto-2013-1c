@@ -1,0 +1,134 @@
+\documentclass[a4paper,10pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{t1enc}
+
+\usepackage[utf8]{inputenc}
+\usepackage{t1enc}
+\usepackage[spanish]{babel}
+\usepackage[pdftex,usenames,dvipsnames]{color}
+\usepackage[pdftex]{graphicx}
+\usepackage{enumerate}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[table]{xcolor}
+\usepackage[small,bf]{caption}
+\usepackage{float}
+\usepackage{subfig}
+\usepackage{listings}
+\usepackage{bm}
+\usepackage{times}
+\usepackage{verbatim}
+\usepackage{moreverb}
+\usepackage{fancyvrb}
+% \usepackage{hyperref}
+\usepackage{multirow}
+\usepackage{url}
+\usepackage{listings}
+\lstset{breaklines=true}
+\lstset{numbers=left, numberstyle=\scriptsize\ttfamily, numbersep=10pt, captionpos=b} 
+\lstset{basicstyle=\small\ttfamily}
+\lstset{framesep=4pt}
+
+\begin{document}
+\setcounter{secnumdepth}{5}
+\setcounter{tocdepth}{5}
+
+\begin{titlepage}
+        \vfill
+        \thispagestyle{empty}
+        \begin{center}
+                \includegraphics{./images/itba_logo.png}
+                \vfill
+                \Huge{Criptografia y Seguridad}\\
+                \vspace{1cm}
+                \Huge{Esteganografía}\\
+                \vspace{1cm}
+                \Huge{Trabajo Pr\'actico Especial 2}\\
+        \end{center}
+        \vfill
+        \large{
+        \begin{tabular}{lcr}
+                Civile, Juan Pablo && 50453\\
+                Crespo, Alvaro && 50758 \\
+                Susnisky, Dario && 50592\\
+        \end{tabular}
+}
+        \vspace{2cm}
+        \begin{center}
+                \large{10 de jde 2013}\\
+        \end{center}
+\end{titlepage}
+\newpage
+
+\setcounter{page}{1}
+
+\section{Introducción}
+
+En el presete Trabajo Práctico se presentan los resultados y análisis generados a partir del programa \textit{stegobmp}, implementado según la especificación
+brindada por la cátedra. Dicho programa brinda la posibilidad de ocultar un archivo cualquiera en un archivo \textit{bmp}, mediante un método de estenografiado específico, 
+con la posibilidad de encriptarlo. De igual forma, el programa permite recuperas el archivo oculto a partir de un archivo \textit{bmp}, que haya sido estenografiado con alguno 
+de los métodos provistos.\\
+
+Se presentan los resultados obtenidos a partir de las imágenes provistas por la cátedra, junto con el análisis de los mismos.
+También se incluye el análisis de algunas cuestiones interesantes, establecidas por la cátedra.
+
+\section{Desarrollo}
+
+\subsection{Estegoanálisis de los archivos provistos}
+
+\subsection{Cuestiones a analizar}
+
+\subsubsection*{ 1) Para la implementación del programa \textit{stegobmp} se pide que la ocultación comience en el
+primer componente del primer pixel. ¿Sería mejor empezar en otra ubicación? ¿Por qué?}
+
+TODO
+
+\subsubsection*{ 2) ¿Qué ventajas podría tener ocultar siempre en una misma componente? Por ejemplo, siempre
+en el bit menos significativo de la componente azul.}
+
+TODO
+
+\subsubsection*{ 3) Esteganografiar un mismo archivo en un .bmp con cada uno de los tres algoritmos, y comparar
+los resultados obtenidos. Hacer un cuadro comparativo de los tres algoritmos estableciendo ventajas y desventajas.}
+
+TODO
+
+\subsubsection*{ 4) Para la implementación del programa \textit{stegobmp} se pide que la extensión del archivo se oculte
+después del contenido completo del archivo. ¿por qué no conviene ponerla al comienzo, después del tamaño de archivo?}
+
+TODO
+
+\subsubsection*{ 5) Explicar detalladamente el procedimiento realizado para descubrir qué se había ocultado en
+cada archivo y de qué modo.}
+
+TODO
+
+\subsubsection*{ 6) ¿Qué se encontró en cada archivo?}
+
+TODO
+
+\subsubsection*{ 7) Algunos mensajes ocultos tenían, a su vez, otros mensajes ocultos. Indica cuál era ese mensaje
+y cómo se había ocultado.}
+
+TODO
+
+\subsubsection*{ 8) Uno de los archivos ocultos era una porción de un video, donde se ve ejemplificado una manera
+de ocultar información ¿cuál fue el portador?}
+
+TODO
+
+\subsubsection*{ 9) ¿De qué se trató el método de estenografiado que no era LSB? ¿Es un método eficaz? ¿Por qué?}
+
+TODO
+
+\subsubsection*{ 10) ¿Qué mejoras o futuras extensiones harías al programa \textit{stegobmp}?}
+
+TODO
+
+\clearpage
+\appendix
+\section{Anexo}
+
+\end{document}
