@@ -57,7 +57,7 @@
 }
         \vspace{2cm}
         \begin{center}
-                \large{10 de jde 2013}\\
+                \large{10 de Junio de 2013}\\
         \end{center}
 \end{titlepage}
 \newpage
@@ -66,9 +66,9 @@
 
 \section{Introducción}
 
-En el presete Trabajo Práctico se presentan los resultados y análisis generados a partir del programa \textit{stegobmp}, implementado según la especificación
+En el presente Trabajo Práctico se muestan los resultados y análisis generados a partir del programa \textit{stegobmp}, implementado según la especificación
 brindada por la cátedra. Dicho programa brinda la posibilidad de ocultar un archivo cualquiera en un archivo \textit{bmp}, mediante un método de estenografiado específico, 
-con la posibilidad de encriptarlo. De igual forma, el programa permite recuperas el archivo oculto a partir de un archivo \textit{bmp}, que haya sido estenografiado con alguno 
+con la posibilidad de encriptarlo. De igual forma, el programa permite recuperar el archivo oculto a partir de un archivo \textit{bmp}, que haya sido estenografiado con alguno 
 de los métodos provistos.\\
 
 Se presentan los resultados obtenidos a partir de las imágenes provistas por la cátedra, junto con el análisis de los mismos.
@@ -85,15 +85,23 @@ primer componente del primer pixel. ¿Sería mejor empezar en otra ubicación? �
 
 TODO
 
+Ideas: Que hable del least significative bit, en cuyo caso conviene para que no te distorsione el color.
+
+Sino, puede no convenir cambiar de posición igual para aprovechar todo el archivo bmp y que te permita esconder archivos mas largos.
+
 \subsubsection*{ 2) ¿Qué ventajas podría tener ocultar siempre en una misma componente? Por ejemplo, siempre
 en el bit menos significativo de la componente azul.}
 
 TODO
 
+Se te distorsiona menos la imagen...Queda mas oculto, solo se cambian los azules...
+
 \subsubsection*{ 3) Esteganografiar un mismo archivo en un .bmp con cada uno de los tres algoritmos, y comparar
 los resultados obtenidos. Hacer un cuadro comparativo de los tres algoritmos estableciendo ventajas y desventajas.}
 
 TODO
+
+Bueno, claramente cuantos mas bits modificas mas se va l carajo la imagen. Ver bien...
 
 \subsubsection*{ 4) Para la implementación del programa \textit{stegobmp} se pide que la extensión del archivo se oculte
 después del contenido completo del archivo. ¿por qué no conviene ponerla al comienzo, después del tamaño de archivo?}
