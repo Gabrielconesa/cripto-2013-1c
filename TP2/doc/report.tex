@@ -89,19 +89,51 @@ Ideas: Que hable del least significative bit, en cuyo caso conviene para que no 
 
 Sino, puede no convenir cambiar de posición igual para aprovechar todo el archivo bmp y que te permita esconder archivos mas largos.
 
+Si reemplazamos siempre los bits menos significativos en orden, es más faćil localizar y extraer la información oculta, podría ser mejor solo ocultar 
+en los bits menos significativos de una secuencia aleatoria basada en una clave o algo similar.
+
+CITA TEXTUAL: ``normalmente esto se hace en las áreas más ruidosas de la imagen que no atrae la atención, como
+por ejemplo, un prado o el cielo``.
+CONVIENE  ocultar en las aŕeas más ruidosas. OK, como localizarlas?\\
+''Use a pixel selection filter to obtain the best areas
+to hide information in the cover image to obtain
+a better rate.''
+
+
+
 \subsubsection*{ 2) ¿Qué ventajas podría tener ocultar siempre en una misma componente? Por ejemplo, siempre
 en el bit menos significativo de la componente azul.}
 
 TODO
 
+Es algo parecido a lo que se propone en el paper Enhanced Least Significant Bit algorithm For Image Steganography de 
+Shilpa Gupta, Geeta Gujral and Neha Aggarwal. Se propone el “Enhanced Least Significant Bit (ELSB)”. 
+
 Se te distorsiona menos la imagen...Queda mas oculto, solo se cambian los azules...
+El salto de colores es menor, aunque se cambian más cantidad de pixeles.
+Desventaja: requiere mayor tamaño de la imagen portadora. Para contrarrestar esto se podría hacer la modificación de solo
+cambiar el bit menos significativo, sino 2, 3 o 4, que igualmente generarían una menor distorsión y requieren menor tamaño. 
+(De hecho con usar 3 bits se requiere el mismo tamaño que al usar LSB-1, lo cual tiene sentido, es lo mismo, en términos de cantidades, tomar 1 bit de cada componente que 
+tomar 3 de una sola componente).
 
 \subsubsection*{ 3) Esteganografiar un mismo archivo en un .bmp con cada uno de los tres algoritmos, y comparar
 los resultados obtenidos. Hacer un cuadro comparativo de los tres algoritmos estableciendo ventajas y desventajas.}
 
 TODO
-
 Bueno, claramente cuantos mas bits modificas mas se va l carajo la imagen. Ver bien...
+
+\begin{tabular}[\baselineskip]{|l|p{7cm}|p{7cm}|p{7cm}}
+    \hline
+    Algoritmo & Ventajas & Desventajas \\
+    \hline
+    LSB-1 &  Menos distorsión & Requiere mayor tamaño del portador \\
+    \hline
+    LSB-4 & Reduce el tamaño requerido del portador & Más distorsión \\
+    \hline
+    LSB Enhanced &  & \\
+    \hline
+\end{tabular} 
+
 
 \subsubsection*{ 4) Para la implementación del programa \textit{stegobmp} se pide que la extensión del archivo se oculte
 después del contenido completo del archivo. ¿por qué no conviene ponerla al comienzo, después del tamaño de archivo?}
@@ -134,6 +166,16 @@ TODO
 \subsubsection*{ 10) ¿Qué mejoras o futuras extensiones harías al programa \textit{stegobmp}?}
 
 TODO
+Que la función de extracción del archivo oculto requiera el uso de la imagen original (cover image) para poder realizar correctamente la extracción.
+Fuerza que aparte de conocer la clave, se debe conocer el original de la imagen.
+
+ Direct Cosine Transformation
+
+ Wavelet Transformation
+
+
+Implementar técnicas orientadas a archivos de texto (que utilicen archivos de texto como portadores) como Line Shift Coding Protocol o Word Shift Coding Protocol (muy interesantes),
+ o White Space Manipulation(SNOW ya lo hace y es open-source). O las técnicas orientadas a archivos XML, que sería relativamente simple.
 
 \clearpage
 \appendix
