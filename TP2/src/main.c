@@ -156,7 +156,6 @@ int extract(size_t n, const char* carrierName, const char* outputName, const cha
     char* extension = (char*) (output->bytes + sizeof(size_t) + extractedSize);
     char* filename = malloc(sizeof(char) * (strlen(outputName) + strlen(extension) + 1));
     strcpy(filename, outputName);
-    strcat(filename, ".");
     strcat(filename, extension);
 
     FILE* out = fopen(filename, "w");
@@ -176,9 +175,6 @@ int embed(size_t n, const char* carrierName, const char* inputName, const char* 
     struct data* rawInput = read_file(inputName);
 
     char* extension = strrchr(inputName, '.');
-    if (extension) {
-        extension += 1;
-    }
     prepare_data(rawInput, extension);
 
     struct data* input;
