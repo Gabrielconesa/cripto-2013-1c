@@ -17,8 +17,8 @@ enum cipher_mode {
     MODE_CBC
 };
 
-struct data* encrypt(const struct data* in, const enum cipher cipher, const enum cipher_mode mode, const char* password);
+struct data* do_encrypt(const struct data* in, const enum cipher cipher, const enum cipher_mode mode, const char* password);
 
-struct data* decrypt(const struct data* in, const enum cipher cipher, const enum cipher_mode mode, const char* password);
+struct data* do_decrypt(const struct data* in, const enum cipher cipher, const enum cipher_mode mode, const char* password);
 
 #endif

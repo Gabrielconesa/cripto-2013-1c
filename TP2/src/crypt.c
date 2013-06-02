@@ -10,7 +10,7 @@ const EVP_CIPHER* get_cipher_type(const enum cipher cipher, const enum cipher_mo
 
 size_t get_key_length(const enum cipher cipher);
 
-struct data* encrypt(const struct data* in, const enum cipher cipher, const enum cipher_mode mode, const char* password) {
+struct data* do_encrypt(const struct data* in, const enum cipher cipher, const enum cipher_mode mode, const char* password) {
 
     assert(password);
     assert(in);
@@ -57,7 +57,7 @@ struct data* encrypt(const struct data* in, const enum cipher cipher, const enum
     return out;
 }
 
-struct data* decrypt(const struct data* in, const enum cipher cipher, const enum cipher_mode mode, const char* password) {
+struct data* do_decrypt(const struct data* in, const enum cipher cipher, const enum cipher_mode mode, const char* password) {
 
     assert(password);
     assert(in);

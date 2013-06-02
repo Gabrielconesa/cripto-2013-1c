@@ -145,7 +145,7 @@ int extract(size_t n, const char* carrierName, const char* outputName, const cha
 
     struct data* output;
     if (password) {
-        output = decrypt(unpack_data(rawOutput), cipher, mode, password);
+        output = do_decrypt(unpack_data(rawOutput), cipher, mode, password);
         free_data(rawOutput);
     } else {
         output = rawOutput;
@@ -183,7 +183,7 @@ int embed(size_t n, const char* carrierName, const char* inputName, const char* 
 
     struct data* input;
     if (password) {
-        input = encrypt(rawInput, cipher, mode, password);
+        input = do_encrypt(rawInput, cipher, mode, password);
         prepare_data(input, NULL);
         free_data(rawInput);
     } else {
