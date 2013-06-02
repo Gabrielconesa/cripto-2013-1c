@@ -42,7 +42,7 @@ void lsbe_extract(struct data* source, struct data* out) {
 
         buffer[byte] |= (source->bytes[byteOnImage] & 0x1) << bitOnByte;
 
-        bitOnByte += 1;
+        bitOnByte -= 1;
         if (bitOnByte < 0) {
             byte++;
             bitOnByte = 7;
