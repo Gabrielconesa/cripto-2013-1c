@@ -153,13 +153,13 @@ int extract(size_t n, const char* carrierName, const char* outputName, const cha
 
     size_t extractedSize = (output->bytes[0] << 24) + (output->bytes[1] << 16) + (output->bytes[2] << 8) + output->bytes[3];
 
-    char* extension = (char*) (output->bytes + sizeof(size_t) + extractedSize);
+    char* extension = (char*) (output->bytes + 4 + extractedSize);
     char* filename = malloc(sizeof(char) * (strlen(outputName) + strlen(extension) + 1));
     strcpy(filename, outputName);
     strcat(filename, extension);
 
     FILE* out = fopen(filename, "w");
-    fwrite(output->bytes + sizeof(size_t), sizeof(unsigned char), extractedSize, out);
+    fwrite(output->bytes + 4, sizeof(unsigned char), extractedSize, out);
     fclose(out);
 
     free_data(image);
