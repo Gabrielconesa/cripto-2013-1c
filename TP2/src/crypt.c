@@ -29,7 +29,7 @@ struct data* do_encrypt(const struct data* in, const enum cipher cipher, const e
 
     const EVP_CIPHER* cipherType = get_cipher_type(cipher, mode);
 
-    assert(EVP_BytesToKey(cipherType, EVP_md5(), NULL, (const unsigned char*) password, strlen(password), 5, key, iv));
+    assert(EVP_BytesToKey(cipherType, EVP_md5(), NULL, (const unsigned char*) password, strlen(password), 1, key, iv));
 
     size_t bufferLength = in->len + AES_BLOCK_SIZE + EVP_MAX_IV_LENGTH;
     unsigned char* buffer = malloc(bufferLength);
@@ -76,7 +76,7 @@ struct data* do_decrypt(const struct data* in, const enum cipher cipher, const e
 
     const EVP_CIPHER* cipherType = get_cipher_type(cipher, mode);
 
-    assert(EVP_BytesToKey(cipherType, EVP_md5(), NULL, (const unsigned char*) password, strlen(password), 5, key, iv));
+    assert(EVP_BytesToKey(cipherType, EVP_md5(), NULL, (const unsigned char*) password, strlen(password), 1, key, iv));
 
     unsigned char* buffer = malloc(in->len);
     assert(buffer);
@@ -85,6 +85,7 @@ struct data* do_decrypt(const struct data* in, const enum cipher cipher, const e
     int lengthDelta;
 
     assert(EVP_DecryptInit_ex(ctx, cipherType, NULL, key, iv));
+    assert(EVP_CIPHER_CTX_block_size(ctx) == 1);
 
     assert(EVP_DecryptUpdate(ctx, buffer, &lengthDelta, in->bytes, in->len));
     length = lengthDelta;
