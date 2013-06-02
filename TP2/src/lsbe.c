@@ -10,7 +10,7 @@ void lsbe_embed(struct data* img, struct data* data) {
 
     for (size_t byte = 0; byte < data->len; byte++) {
 
-        for (size_t bitOnByte = 0; bitOnByte < 8; bitOnByte += 1, byteOnImage++) {
+        for (int bitOnByte = 7; bitOnByte >= 0; bitOnByte -= 1, byteOnImage++) {
 
             while (!CAN_EMBED(img->bytes[byteOnImage])) {
                 byteOnImage++;
@@ -30,7 +30,7 @@ void lsbe_extract(struct data* source, struct data* out) {
     memset(buffer, 0, maxOutputSize);
 
     size_t byte = 0;
-    size_t bitOnByte = 0;
+    int bitOnByte = 7;
 
     for (size_t byteOnImage = BMP_HEADER_SIZE; byte < maxOutputSize; byteOnImage++) {
 
@@ -43,9 +43,9 @@ void lsbe_extract(struct data* source, struct data* out) {
         buffer[byte] |= (source->bytes[byteOnImage] & 0x1) << bitOnByte;
 
         bitOnByte += 1;
-        if (bitOnByte == 8) {
+        if (bitOnByte < 0) {
             byte++;
-            bitOnByte = 0;
+            bitOnByte = 7;
         }
 
     }
