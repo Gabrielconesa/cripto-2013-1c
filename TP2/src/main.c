@@ -151,7 +151,7 @@ int extract(size_t n, const char* carrierName, const char* outputName, const cha
         output = rawOutput;
     }
 
-    size_t extractedSize = *((size_t*) output->bytes);
+    size_t extractedSize = (output->bytes[0] << 24) + (output->bytes[1] << 16) + (output->bytes[2] << 8) + output->bytes[3];
 
     char* extension = (char*) (output->bytes + sizeof(size_t) + extractedSize);
     char* filename = malloc(sizeof(char) * (strlen(outputName) + strlen(extension) + 1));

@@ -26,7 +26,10 @@ void prepare_data(struct data* data, const char* suffix) {
     unsigned char* buffer = malloc(sizeof(unsigned char) * newLength);
     assert(buffer);
 
-    *((size_t*) buffer) = data->len;
+    buffer[0] = (data->len >> 24) & 0xFF;
+    buffer[1] = (data->len >> 16) & 0xFF;
+    buffer[2] = (data->len >> 8) & 0xFF;
+    buffer[3] = data->len & 0xFF;
     memcpy(buffer + sizeof(size_t), data->bytes, data->len);
 
     if (suffix) {
@@ -45,7 +48,7 @@ struct data* unpack_data(struct data* packed) {
 
     assert(packed);
 
-    packed->len = *((size_t*) packed->bytes);
+    packed->len = (packed->bytes[0] << 24) + (packed->bytes[1] << 16) + (packed->bytes[2] << 8) + packed->bytes[3];
 
     unsigned char* buffer = malloc(packed->len);
     assert(buffer);
