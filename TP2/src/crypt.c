@@ -85,7 +85,6 @@ struct data* do_decrypt(const struct data* in, const enum cipher cipher, const e
     int lengthDelta;
 
     assert(EVP_DecryptInit_ex(ctx, cipherType, NULL, key, iv));
-    assert(EVP_CIPHER_CTX_block_size(ctx) == 1);
 
     assert(EVP_DecryptUpdate(ctx, buffer, &lengthDelta, in->bytes, in->len));
     length = lengthDelta;
