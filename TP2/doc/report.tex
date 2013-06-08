@@ -83,38 +83,37 @@ También se incluye el análisis de algunas cuestiones interesantes, establecida
 \subsubsection*{ 1) Para la implementación del programa \textit{stegobmp} se pide que la ocultación comience en el
 primer componente del primer pixel. ¿Sería mejor empezar en otra ubicación? ¿Por qué?}
 
-TODO
+Dado que la ocultación que se utiliza se basa en el método LSB (\textit{\textbf{Least Significant Bit}}), los bits ``aprovechables'' son pocos. En el caso de 
+LSB1, se pueden utilizar 1 de cada 8 bits, (el bit menos significativo de cada byte). Si se usa LSB4, se pueden utilizar 4 de cada 8, lo que mejor bastante la cantidad de 
+espacio ``aprovechable''. Aún así, utilizando los últimos 4 bits de cada byte, ya se está introduciendo una disposición no menor, por lo que la cuestión del espacio resulta 
+importante. \\
 
-Ideas: Que hable del least significative bit, en cuyo caso conviene para que no te distorsione el color.
+Por lo tanto, es conveniente empezar la ocultación desde el comienzo de la imagen, es decir el primer pixel, para poder disponer de toda la imagen para, en caso de ser necesario,
+ocultar en los bits menos significativos, la información del mensaje oculto.\\
 
-Sino, puede no convenir cambiar de posición igual para aprovechar todo el archivo bmp y que te permita esconder archivos mas largos.
+Otra cuestión de interés, es que si se oculta información siempre en los bits menos significativos en orden, es más fácil localizar y extraer la información oculta, podría 
+ser mejor solo ocultar en los bits menos significativos de una secuencia aleatoria basada en una clave o algo similar. De está forma, el lugar donde se comienza la ocultación
+pierde su significado, ya que no importa por donde se comienza la ocultación, siempre y cuando se utilice todo el archivo para ocultar.\\
 
-Si reemplazamos siempre los bits menos significativos en orden, es más faćil localizar y extraer la información oculta, podría ser mejor solo ocultar 
-en los bits menos significativos de una secuencia aleatoria basada en una clave o algo similar.
-
-CITA TEXTUAL: ``normalmente esto se hace en las áreas más ruidosas de la imagen que no atrae la atención, como
-por ejemplo, un prado o el cielo``.
-CONVIENE  ocultar en las aŕeas más ruidosas. OK, como localizarlas?\\
-''Use a pixel selection filter to obtain the best areas
-to hide information in the cover image to obtain
-a better rate.''
-
-
+Otro aspecto importante a la hora de escoger el lugar de la imagen es el ruido, es decir, las zonas donde la imagen contiene ruido. Varios autores aseguran, y con razón, que lo mejor 
+para minimizar la distorsión de la imagen al ocultar el mensaje, es ocultar el mensaje en las zonas más ruidosas de la imagen, ya que la distorsión atrae menos la atención. Para 
+encontrar estas zonas, se utilizan filtros de selección de píxeles.
 
 \subsubsection*{ 2) ¿Qué ventajas podría tener ocultar siempre en una misma componente? Por ejemplo, siempre
 en el bit menos significativo de la componente azul.}
 
-TODO
-
 Es algo parecido a lo que se propone en el paper Enhanced Least Significant Bit algorithm For Image Steganography de 
-Shilpa Gupta, Geeta Gujral and Neha Aggarwal. Se propone el “Enhanced Least Significant Bit (ELSB)”. 
+Shilpa Gupta, Geeta Gujral y Neha Aggarwal. Se propone el “Enhanced Least Significant Bit (ELSB)”, que consiste justamente en ocultar siempre en 
+la primer componente, es decir, en el bit menos significativo de la componente azul.\\
 
-Se te distorsiona menos la imagen...Queda mas oculto, solo se cambian los azules...
-El salto de colores es menor, aunque se cambian más cantidad de pixeles.
-Desventaja: requiere mayor tamaño de la imagen portadora. Para contrarrestar esto se podría hacer la modificación de solo
-cambiar el bit menos significativo, sino 2, 3 o 4, que igualmente generarían una menor distorsión y requieren menor tamaño. 
-(De hecho con usar 3 bits se requiere el mismo tamaño que al usar LSB-1, lo cual tiene sentido, es lo mismo, en términos de cantidades, tomar 1 bit de cada componente que 
-tomar 3 de una sola componente).
+Las ventajas son las obvias. Se distorsiona menos la imagen, ya que solo se altera la banda de los azules. El salto de color es menor, ya que si, por ejemplo se 
+cambiará la componente roja, el rango de colores que se saltea es mayor. Recordar que el color se define como la concatenación de 3 valores de 0 a 255, rojo, verde y azul, en 
+ese orden, por lo que valor del color azul es menos significativo que los otros dos.\\
+
+La desventaja es también clara: se requiere mayor tamaño de la imagen portadora. Para contrarrestar esto se podría hacer la modificación de solo
+cambiar el bit menos significativo, sino 2, 3 o 4, que igualmente generarían una menor distorsión y requieren menor tamaño. De hecho con usar 3 bits se requiere el mismo 
+tamaño que al usar LSB-1, lo cual tiene sentido, es lo mismo, en términos de cantidades, tomar 1 bit de cada componente que 
+tomar 3 de una sola componente.\\
 
 \subsubsection*{ 3) Esteganografiar un mismo archivo en un .bmp con cada uno de los tres algoritmos, y comparar
 los resultados obtenidos. Hacer un cuadro comparativo de los tres algoritmos estableciendo ventajas y desventajas.}
@@ -122,15 +121,18 @@ los resultados obtenidos. Hacer un cuadro comparativo de los tres algoritmos est
 TODO
 Bueno, claramente cuantos mas bits modificas mas se va l carajo la imagen. Ver bien...
 
-\begin{tabular}[\baselineskip]{|l|p{7cm}|p{7cm}|p{7cm}}
+\begin{tabular}[\baselineskip]{|l|c|c|c}
     \hline
     Algoritmo & Ventajas & Desventajas \\
     \hline
     LSB-1 &  Menos distorsión & Requiere mayor tamaño del portador \\
     \hline
-    LSB-4 & Reduce el tamaño requerido del portador & Más distorsión \\
+    LSB-4       & Reduce tamaño requerido       & Más distorsión \\
+                &  del portadora                & \\
     \hline
-    LSB Enhanced &  & \\
+    LSB Enhanced & Mínima distorsión    & Muchísimo tamaño del portador.\\
+                 &                      & No hay una relación directa entre \\
+                 &                      & el tamaño del portador y del mensaje.\\
     \hline
 \end{tabular} 
 
@@ -138,47 +140,214 @@ Bueno, claramente cuantos mas bits modificas mas se va l carajo la imagen. Ver b
 \subsubsection*{ 4) Para la implementación del programa \textit{stegobmp} se pide que la extensión del archivo se oculte
 después del contenido completo del archivo. ¿por qué no conviene ponerla al comienzo, después del tamaño de archivo?}
 
-TODO
+Podría argumentarse que esteganografiar la extensión por separado no es necesario. Pero lo cierto es que se necesita para rearmar el archivo rápidamente, y sin dejar librado
+al usuario del programa que deba adivinar o saber el formato del archivo oculto. Por que si bien el contenido entero podría ocultarse y recuperarse exitosamente, sin la extensión
+no se podría nombrar correctamente el archivo, y los sistemas operativos no sabrían con que programas abrirlos. Por otro lado, es cierto que no es una buena idea que 
+un atacante pueda, descubriendo una secuencia de unos pocos bits que forman 4 chars identificables, tener mucha información respecto del archivo que se encuentra oculto.
+Es por esto que quizás, no sea conveniente poner la extensión al principio, donde puede ser más fácilmente encontrada. De todas formas, esto es discutible, ya que si un atacante logra
+descifrar los 4 bytes que determinan el tamaño del archivo, podría encontrar con fácilidad donde se encuentran los caracteres de la extensión, siempre y cuando no se utilice algunas
+forma de randomización o alteración del orden de los bits ocultados, como con el uso de una clave.\\
 
 \subsubsection*{ 5) Explicar detalladamente el procedimiento realizado para descubrir qué se había ocultado en
 cada archivo y de qué modo.}
 
-TODO
+En un principio, se intentó extraer cada archivo con todos los algoritmos de estenografiado, para ver a qué algoritmo respondía cada uno. De esta forma, se 
+encontró que el archivo \textit{miserables2.bmp} había sido estenografiado con el algoritmo LSB1, y el mensaje oculto era un archivo \textit{.png}, el cual contenía una 
+imagen de un tablero del juego \textit{buscaminas}, a medio terminar. En segundo lugar, se encontró que el archivo \textit{medianocheparis1.bmp} había sido estenografiado 
+con el algoritmo LSB4, y el mensaje oculto era una archivo \textit{.wmv}, pero no se podía reproducir correctamente con ningún reproductor de vídeo, 
+tanto en Linux como en Windows como en Mac.
+Dejando ese llamativo descubrimiento de lado por un momento, se extrajo satisfactoriamente el archivo \textit{.pdf} del archivo \textit{loimposible.bmp}, el cual conteía el texto
+``La password es bienvenido''.\\
+Luego, se procedió a analizar el cuarto archivo, \textit{secretodesusojos1.bmp}, y trás un largo análisis, se descubrió, via un editor hexadecimal, que hacia el final del archivo, 
+en la representación en caracteres ASCII, se podía leer el siguiente mensaje: \\
+
+\begin{center}
+\textbf{\textit{    ``al .png cambiar extension por .zip y descomprimir.''}}
+\end{center}
+
+Ante esta revelación, se siguieron dichas instrucciones, y lo que se obtuvo fue un pequeño archivo de texto, \textit{sol8.txt}, que contenía lo siguiente:
+
+\begin{center}
+\textbf{\textit{
+    ``cada mina es un 1.\\
+    cada fila forma una letra.\\
+    Los ascii de las letras empiezan todos en 01.\\
+    Asi encontraras el algoritmo que tiene clave de 128 bits y el modo\\
+    La password esta en otro archivo\\
+    Con algoritmo, modo y password hay un .wmv encriptado y oculto.''
+}}
+\end{center}
+
+Con este nuevo descubrimiento, se resolvió el mensaje encodeado en la imagen \textit{.png}. \textit{\textbf{Resolviendo}} el tablero del buscaminas, se obtuvo el siguiente resultado:
+\begin{center}
+\begin{tabular}{|l|c|c|c|}
+    \hline
+    Binario       & Decimal       & Hexadecimal   & ASCII \\
+    \hline
+    0100001       & 101           & 41            & A     \\
+    \hline
+    01100101      & 101           & 65            & e     \\
+    \hline
+    01110011      & 115           & 73 hex        & s     \\
+    \hline
+    01000011      & 67            & 43 hex        & C     \\
+    \hline
+    01100000      & 98            & 62 hex        & b     \\
+    \hline
+    01100011      & 99            & 63 hex        & c     \\
+    \hline
+\end{tabular}
+\end{center}
+
+Al romper este código, la respuesta era clara, se debía usar el programa \textit{stegobmp} para extraer correctamente el archivo \textit{.wmv}, con el algoritmo de encriptación
+\textit{\textbf{aes128}}, en modo \textit{\textbf{cbc}} y utilizando como contraseña \textit{\textbf{bienvenido}}.\\
+
+Finalmente, al realizar la extracción con desencriptación del archivo \textit{medianocheparis1.bmp}, el que había respondido al algoritmo LSB4 y había arrojado un 
+\textit{.wmv} corrupto, se obtuvo el archivo \textit{.wmv} deseado. El video mostraba una escena de la película \textit{\textbf{Wanted}} (\textit{\textbf{Se busca}} en castellano)
+la cuál habla de una mística máquina de telar, que produce unas telas que tienen un código secreto, según la disposición de los hilos, que establece objectivos para una selecta
+comunidad secreta de asesinos.
 
 \subsubsection*{ 6) ¿Qué se encontró en cada archivo?}
 
-TODO
+Como se dijo en la respuesta anterior, estos son los resultados para cada archivo:
+
+\begin{center}
+\begin{tabular}{|l|c|c|}
+    \hline
+    Archivo portador (BMP)  & Alg. esteganografiado         & Mensaje oculto     \\
+    \hline
+    miserables2             & LSB1                          & Imagen PNG(archivo ZIP c/ archivo de texto)\\
+    \hline
+    medianocheparis1        & LSB4 + aes-128-cbc            & Video WMV \\
+    \hline
+    loimposible             & LSBE                          & Documento PDF\\
+    \hline
+    secretodesusojos1       & Misterioso                    & Texto (pista para desencriptar el WMV)\\
+    \hline
+\end{tabular}
+\end{center}
 
 \subsubsection*{ 7) Algunos mensajes ocultos tenían, a su vez, otros mensajes ocultos. Indica cuál era ese mensaje
 y cómo se había ocultado.}
 
-TODO
+El mensaje oculto que consistía en una imagen \textit{.png}, era a su vez, un archivo portador de otro mensaje oculto, y además en la imagen se encontraba
+un código que, descifrado, proporcionaba el algoritmo y el modo de encriptación para poder extraer correctamente otro de los mensajes ocultos. \\
+
+Para empezar, al archivo se le podía cambiar la extensión a \textit{.zip}, y descomprimirlo, obteniendo un pequeño archivo de texto que contenía instrucciones a seguir.
+Algunas de esas instrucciones decían también, que la imagen contenía otro mensaje oculto, el algoritmo y el modo de encriptación para lograr extraer el otro de los mensajes ocultos.
+La imagen consistía en un tablero del juego \textit{Buscaminas}, y si se completaba y se seguían las instrucciones para su decodificación, se podía extraer este otro mensaje oculto.
+En este caso era \textit{\textbf{aes}} y \textit{\textbf{cbc}}.
 
 \subsubsection*{ 8) Uno de los archivos ocultos era una porción de un video, donde se ve ejemplificado una manera
 de ocultar información ¿cuál fue el portador?}
 
-TODO
+Como se explicó en la pregunta 5, el archivo \textit{.wmv} que estaba esteganografiado y encriptado, contenía escenas de una película muy conocida, en la que se 
+ocultaban y extraían mensajes a través de telas. El método consistía en fijarse la disposición de los hilos y según como estaban entrelazados, se podía obtener un código 
+binario que representaba un nombre de una persona. Esa persona era un objetivo para que una selecta comunidad secreta de asesinos matara.
 
 \subsubsection*{ 9) ¿De qué se trató el método de estenografiado que no era LSB? ¿Es un método eficaz? ¿Por qué?}
 
-TODO
+El método que no era LSB, fue un método un tanto ``casero'' y rudimentario. Lo que se hizo fue simplemente agregar al final de la imagen en formato \textit{.bmp} un corto mensaje 
+oculto, con una pista clave para consegui la desencriptación de otro de los mensajes ocultos. La razón por la que el ocultamiento funciona es porque el tamaño de la imagen (la cantidad
+de píxeles) está establecida en el header del archivo, y en eso se basan los programas que imprimen la imagen a pantalla. Si se agregan bytes luego del supuesto ``final'' de la imagen, 
+es decir luego del último píxel contabilizado en el header, estos no se veŕan en los típicos programas que renderizan imágenes. Pero si, por el contrario, se utiliza un editor de texto
+hexadecimal, se puede ver que entre el supuesto final del la imagen y el EOF (el caracter \textit{end of file}), puede existir información, como en el caso en cuestión, que no será
+percibida con los programas que comunmente se utilizan para abrir imágenes.\\
+
+Se dice que es una técnica un tanto rudimentaria ya que el ocultamiento se puede lograr sin mucho esfuerzo, ni conocimiento de algoritmos o formatos de archivos. En linux es tan simple 
+como correr por línea de comandos:
+
+\begin{center}
+    echo ``este es mi mensaje'' $>>$ imagen.bmp
+\end{center}
+o
+\begin{center}
+    cat mensaje.txt $>>$ imagen.bmp
+\end{center}
+
+Donde \textit{mensaje.txt} contiene el mensaje que se desea ocultar, y \textit{imagen.bmp}.\\
+
+Algo similar puede lograrse, desde Windows, corriendo:
+\begin{center}
+    imagen.bmp + mensaje.txt nuevaImagen.bmp
+\end{center}
+
+En donde no se modifica la imagen en cuestión, sino que se crea una nuevo archivo que contiene la imagen con el mensaje oculto en ella.
 
 \subsubsection*{ 10) ¿Qué mejoras o futuras extensiones harías al programa \textit{stegobmp}?}
 
-TODO
-Que la función de extracción del archivo oculto requiera el uso de la imagen original (cover image) para poder realizar correctamente la extracción.
-Fuerza que aparte de conocer la clave, se debe conocer el original de la imagen.
+Una posible mejora al programa \textit{stegobmp} es agregarle opcionalmente el uso de una contraseña de esteganografiado que defina el orden aleatorio en el que
+se ocultan los bits del mensaje oculto. \\
 
- Direct Cosine Transformation
+Otra opción, podría ser que tanto para extraer el mensaje oculto, se requiera el uso de la imagen original (cover image). Esto fuerza que, aparte de conocer la clave, 
+se debe conocer el original de la imagen.\\
 
- Wavelet Transformation
+Algunas variantes para explorar podrían ser la aplicación de \textit{Direct Cosine Transformation} o \textit{Wavelet Transformation}, técnicas que son levemente más complejas 
+que el esteganografiado con LSB.\\
 
-
-Implementar técnicas orientadas a archivos de texto (que utilicen archivos de texto como portadores) como Line Shift Coding Protocol o Word Shift Coding Protocol (muy interesantes),
- o White Space Manipulation(SNOW ya lo hace y es open-source). O las técnicas orientadas a archivos XML, que sería relativamente simple.
+Algo interesante, sería agregarle el soporte al programa para poder ocultar en otra clase de archivos portadores, como por ejemplo archivos de sonido, o de texto. Algunas
+técnicas orientadas a archivos de texto (que utilicen archivos de texto como portadores) como Line Shift Coding Protocol o Word Shift Coding Protocol serían 
+muy interesantes, o White Space Manipulation (SNOW ya lo hace y es open-source).
 
 \clearpage
 \appendix
 \section{Anexo}
+
+\begin{figure}[!htb]
+\minipage{0.48\textwidth}
+   \includegraphics[scale=0.075]{./images/secretodesusojos1.png}
+    % secretodesusojos1.png: 2480x3528 pixel, 96dpi, 65.61x93.33 cm, bb=0 0 1860 2646
+  \caption{El secreto de sus ojos. Esteganografiada con el método ``misterioso'' (appendear texto al final del archivo BMP).}\label{fig:awesome_image1}
+\endminipage\hfill
+\minipage{0.5\textwidth}
+   \includegraphics[scale=0.15]{./images/miserables2.png}
+    % miserables2.png: 1000x1354 pixel, 72dpi, 35.27x47.76 cm, bb=0 0 1000 1354
+  \caption{Los miserables. Esteganografiada con el método LSB1.}\label{fig:awesome_image2}
+\endminipage\hfill
+\end{figure}
+
+\begin{figure}[!htb]
+\minipage{0.48\textwidth}%
+  \includegraphics[scale=0.175]{./images/medianocheparis1.png}
+  % medianocheparis1.png: 1120x1600 pixel, 96dpi, 29.63x42.33 cm, bb=0 0 840 1200
+  \caption{Los miserables. Esteganografiada con el método LSB4 y usando encriptación para el mensaje oculto usando aes de 128 bits en
+    modo cbc y con contraseña \textit{bienvenido}.}\label{fig:awesome_image3}
+\endminipage
+\minipage{0.02\textwidth}%
+
+\endminipage
+\minipage{0.5\textwidth}%
+   \includegraphics[scale=0.5]{./images/loimposible.png}
+    % loimposible.png: 1400x2000 pixel, 300dpi, 11.85x16.93 cm, bb=0 0 336 480
+  \caption{Lo imposible. Esteganografiada con el método LSBE.}\label{fig:awesome_image4}
+\endminipage
+\end{figure}
+
+\clearpage
+
+ 
+\begin{figure}[!htb]
+\begin{center}
+\minipage{0.48\textwidth}%
+ \includegraphics[scale=0.5]{./images/miserables2-out.png}
+ % miserables2-out.png: 413x302 pixel, 96dpi, 10.93x7.99 cm, bb=0 0 310 227
+  \caption{Imagen PNG. Obtenida utilizando el método LSB1 en la imagen de la figura \ref{fig:awesome_image2}. A la vez, se puede cambiar su extensión por ZIP y 
+    descomprimir para obtener un archivo de texto. Además tiene codificado dentro, en forma binaria el algoritmo y el modo de encriptación para desencriptar
+    el archivo WMV oculto en la imagen de la figura \ref{fig:awesome_image2}.}\label{fig:awesome_image5}
+\endminipage
+\end{center}
+\end{figure}
+
+\begin{figure}[!htb]
+\begin{center}
+\minipage{0.48\textwidth}%
+ \includegraphics[scale=0.25]{./images/loimposible-out.pdf}
+ % loimposible-out.pdf: 595x842 pixel, 72dpi, 20.99x29.70 cm, bb=0 0 595 842
+  \caption{Documento PDF. Obtenido a partir de la imagen de la figura \ref{fig:awesome_image4}. Brinda la constraseña para desencriptar el archivo 
+    WMV oculto en la imagen de la figura \ref{fig:awesome_image2}.}\label{fig:awesome_image6}
+\endminipage
+\end{center}
+\end{figure}
+
 
 \end{document}
