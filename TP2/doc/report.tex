@@ -78,6 +78,9 @@ También se incluye el análisis de algunas cuestiones interesantes, establecida
 
 \subsection{Estegoanálisis de los archivos provistos}
 
+El desarrollo detallado del proceso de stegoanálisis de los archivos provistos por la cátedra se puede encontrar en la respuesta de la pregunta 5 de la siguiente sección.
+Allí se halla explicitado el procedimiento completo para extraer cada uno de los mensajes ocultos y los pasos que se debieron realizar.\\
+
 \subsection{Cuestiones a analizar}
 
 \subsubsection*{ 1) Para la implementación del programa \textit{stegobmp} se pide que la ocultación comience en el
@@ -118,8 +121,15 @@ tomar 3 de una sola componente.\\
 \subsubsection*{ 3) Esteganografiar un mismo archivo en un .bmp con cada uno de los tres algoritmos, y comparar
 los resultados obtenidos. Hacer un cuadro comparativo de los tres algoritmos estableciendo ventajas y desventajas.}
 
-TODO
-Bueno, claramente cuantos mas bits modificas mas se va l carajo la imagen. Ver bien...
+En el Anexo se encuentran las imágenes (figuras \ref{fig:awesome_image3} y \ref{fig:awesome_image4}) luego de haber esteganografiado una misma imagen (figura \ref{fig:awesome_image1}) 
+para ocultar una determinada imagen (figura \ref{fig:awesome_image2})
+con los algoritmos LSB. Cabe destacar, que con LSBE no se pudo ocultar la imagen deseada porque la imagen portadora solo podía ocultar 22 bytes utilizando ese algoritmo. Esto se debe a que no hay muchos píxeles cuyos valores de alguna 
+componente sea 254 o 255.\\
+
+No es fácilmente apreciable, pero puede notarse como, la imagen esteganografiada con LSB4 presenta un poco de distorsión, mientras que la que fue esteganografiada con LSB1 es, a simple
+vista, idéntica a la original.\\
+
+El siguiente cuadro refleja la comparación entre los algoritmos de esteganografiado estudiados.\\
 
 \begin{tabular}[\baselineskip]{|l|c|c|c}
     \hline
@@ -151,15 +161,18 @@ forma de randomización o alteración del orden de los bits ocultados, como con 
 \subsubsection*{ 5) Explicar detalladamente el procedimiento realizado para descubrir qué se había ocultado en
 cada archivo y de qué modo.}
 
+Las imágenes aquí referenciadas se encuentran en la sección Anexo.\\
+
 En un principio, se intentó extraer cada archivo con todos los algoritmos de estenografiado, para ver a qué algoritmo respondía cada uno. De esta forma, se 
-encontró que el archivo \textit{miserables2.bmp} había sido estenografiado con el algoritmo LSB1, y el mensaje oculto era un archivo \textit{.png}, el cual contenía una 
-imagen de un tablero del juego \textit{buscaminas}, a medio terminar. En segundo lugar, se encontró que el archivo \textit{medianocheparis1.bmp} había sido estenografiado 
+encontró que el archivo \textit{miserables2.bmp} (figura \ref{fig:awesome_image6}) había sido estenografiado con el algoritmo LSB1, y el mensaje oculto era un archivo \textit{.png}, el cual contenía una 
+imagen de un tablero del juego \textit{buscaminas}, a medio terminar (figura \ref{fig:awesome_image9}). En segundo lugar, se encontró que el archivo 
+\textit{medianocheparis1.bmp} (figura \ref{fig:awesome_image7}) había sido estenografiado 
 con el algoritmo LSB4, y el mensaje oculto era una archivo \textit{.wmv}, pero no se podía reproducir correctamente con ningún reproductor de vídeo, 
 tanto en Linux como en Windows como en Mac.
 Dejando ese llamativo descubrimiento de lado por un momento, se extrajo satisfactoriamente el archivo \textit{.pdf} del archivo \textit{loimposible.bmp}, el cual conteía el texto
-``La password es bienvenido''.\\
-Luego, se procedió a analizar el cuarto archivo, \textit{secretodesusojos1.bmp}, y trás un largo análisis, se descubrió, via un editor hexadecimal, que hacia el final del archivo, 
-en la representación en caracteres ASCII, se podía leer el siguiente mensaje: \\
+``La password es bienvenido'' (figura \ref{fig:awesome_image10}). Esta imagen había sido esteganografiada con el método LSBE.\\
+Luego, se procedió a analizar el cuarto archivo, \textit{secretodesusojos1.bmp} (figura \ref{fig:awesome_image5}), y trás un largo análisis, se descubrió, via un editor hexadecimal, 
+que hacia el final del archivo, en la representación en caracteres ASCII, se podía leer el siguiente mensaje: \\
 
 \begin{center}
 \textbf{\textit{    ``al .png cambiar extension por .zip y descomprimir.''}}
@@ -294,15 +307,44 @@ muy interesantes, o White Space Manipulation (SNOW ya lo hace y es open-source).
 \section{Anexo}
 
 \begin{figure}[!htb]
+\minipage[c]{0.58\textwidth}
+    \includegraphics[scale=0.48]{./images/lenacolor.jpg}
+    % lenacolor.jpg: 512x512 pixel, 96dpi, 13.55x13.55 cm, bb=0 0 384 384
+    \caption{Imagen de Lena. Imagen portadora original.}\label{fig:awesome_image1}
+\endminipage\hfill
+\minipage[c]{0.5\textwidth}
+    \includegraphics[scale=0.3]{./images/hogwarts.jpg}
+    % hogwarts.jpg: 720x405 pixel, 300dpi, 6.10x3.43 cm, bb=0 0 173 97
+    \caption{Imagen que se quiere ocultar. Imagen JPG del castillo de Hogwarts en Minecraft.}\label{fig:awesome_image2}
+\endminipage\hfill
+\end{figure}
+
+
+\begin{figure}[!htb]
+\minipage{0.58\textwidth}    
+    \includegraphics[scale=0.5]{./images/lenacolor-lsb1.jpg}
+    % lenacolor-lsb1.jpg: 512x512 pixel, 96dpi, 13.55x13.55 cm, bb=0 0 384 384
+    \caption{Resultado de ocultar la imagen \ref{fig:awesome_image2} en \ref{fig:awesome_image1} utilizando LSB1. }\label{fig:awesome_image3}
+\endminipage\hfill
+\minipage{0.5\textwidth}
+    \includegraphics[scale=0.5]{./images/lenacolor-lsb4.jpg}
+    % lenacolor-lsb4.jpg: 512x512 pixel, 96dpi, 13.55x13.55 cm, bb=0 0 384 384
+    \caption{Resultado de ocultar la imagen \ref{fig:awesome_image2} en \ref{fig:awesome_image1} utilizando LSB4. Se puede observar que comienza a haber un poco de ruido
+    apreciable, sobre todo en la parte del hombro.}\label{fig:awesome_image4}
+\endminipage\hfill
+\end{figure}
+
+
+\begin{figure}[!htb]
 \minipage{0.48\textwidth}
    \includegraphics[scale=0.075]{./images/secretodesusojos1.png}
     % secretodesusojos1.png: 2480x3528 pixel, 96dpi, 65.61x93.33 cm, bb=0 0 1860 2646
-  \caption{El secreto de sus ojos. Esteganografiada con el método ``misterioso'' (appendear texto al final del archivo BMP).}\label{fig:awesome_image1}
+  \caption{El secreto de sus ojos. Esteganografiada con el método ``misterioso'' (appendear texto al final del archivo BMP).}\label{fig:awesome_image5}
 \endminipage\hfill
 \minipage{0.5\textwidth}
    \includegraphics[scale=0.15]{./images/miserables2.png}
     % miserables2.png: 1000x1354 pixel, 72dpi, 35.27x47.76 cm, bb=0 0 1000 1354
-  \caption{Los miserables. Esteganografiada con el método LSB1.}\label{fig:awesome_image2}
+  \caption{Los miserables. Esteganografiada con el método LSB1.}\label{fig:awesome_image6}
 \endminipage\hfill
 \end{figure}
 
@@ -311,7 +353,7 @@ muy interesantes, o White Space Manipulation (SNOW ya lo hace y es open-source).
   \includegraphics[scale=0.175]{./images/medianocheparis1.png}
   % medianocheparis1.png: 1120x1600 pixel, 96dpi, 29.63x42.33 cm, bb=0 0 840 1200
   \caption{Los miserables. Esteganografiada con el método LSB4 y usando encriptación para el mensaje oculto usando aes de 128 bits en
-    modo cbc y con contraseña \textit{bienvenido}.}\label{fig:awesome_image3}
+    modo cbc y con contraseña \textit{bienvenido}.}\label{fig:awesome_image7}
 \endminipage
 \minipage{0.02\textwidth}%
 
@@ -319,7 +361,7 @@ muy interesantes, o White Space Manipulation (SNOW ya lo hace y es open-source).
 \minipage{0.5\textwidth}%
    \includegraphics[scale=0.5]{./images/loimposible.png}
     % loimposible.png: 1400x2000 pixel, 300dpi, 11.85x16.93 cm, bb=0 0 336 480
-  \caption{Lo imposible. Esteganografiada con el método LSBE.}\label{fig:awesome_image4}
+  \caption{Lo imposible. Esteganografiada con el método LSBE.}\label{fig:awesome_image8}
 \endminipage
 \end{figure}
 
@@ -331,9 +373,9 @@ muy interesantes, o White Space Manipulation (SNOW ya lo hace y es open-source).
 \minipage{0.48\textwidth}%
  \includegraphics[scale=0.5]{./images/miserables2-out.png}
  % miserables2-out.png: 413x302 pixel, 96dpi, 10.93x7.99 cm, bb=0 0 310 227
-  \caption{Imagen PNG. Obtenida utilizando el método LSB1 en la imagen de la figura \ref{fig:awesome_image2}. A la vez, se puede cambiar su extensión por ZIP y 
+  \caption{Imagen PNG. Obtenida utilizando el método LSB1 en la imagen de la figura \ref{fig:awesome_image6}. A la vez, se puede cambiar su extensión por ZIP y 
     descomprimir para obtener un archivo de texto. Además tiene codificado dentro, en forma binaria el algoritmo y el modo de encriptación para desencriptar
-    el archivo WMV oculto en la imagen de la figura \ref{fig:awesome_image2}.}\label{fig:awesome_image5}
+    el archivo WMV oculto en la imagen de la figura \ref{fig:awesome_image6}.}\label{fig:awesome_image9}
 \endminipage
 \end{center}
 \end{figure}
@@ -343,8 +385,8 @@ muy interesantes, o White Space Manipulation (SNOW ya lo hace y es open-source).
 \minipage{0.48\textwidth}%
  \includegraphics[scale=0.25]{./images/loimposible-out.pdf}
  % loimposible-out.pdf: 595x842 pixel, 72dpi, 20.99x29.70 cm, bb=0 0 595 842
-  \caption{Documento PDF. Obtenido a partir de la imagen de la figura \ref{fig:awesome_image4}. Brinda la constraseña para desencriptar el archivo 
-    WMV oculto en la imagen de la figura \ref{fig:awesome_image2}.}\label{fig:awesome_image6}
+  \caption{Documento PDF. Obtenido a partir de la imagen de la figura \ref{fig:awesome_image8}. Brinda la constraseña para desencriptar el archivo 
+    WMV oculto en la imagen de la figura \ref{fig:awesome_image6}.}\label{fig:awesome_image10}
 \endminipage
 \end{center}
 \end{figure}
